@@ -1,5 +1,5 @@
 import numpy as np
-from scipy.optimize import minimize, fsolve
+from scipy.optimize import minimize, root
 
 n = 1.0
 g = 9.81
@@ -32,34 +32,44 @@ def inertiaBalance(t,r,p): #t is a 8-dim vector containing the 8 Tensions while 
 
     #return np.maximum(massCenter,angularMomentum)
     #return max(massCenter)
-    return np.concatenate((massCenter,angularMomentum,[0,0]), axis=0)
+    return np.concatenate((massCenter,angularMomentum), axis=0)
 
 #def physics(t):
 
 
 def maxTensions(t):
-    return max(t[0],t[1],t[2],t[3],t[4],t[5],t[6],t[7])
+    print(sum((t**2)))
+    return (sum(t**2))
 
 
 r = np.array([[1,1,1],[1,1,-1],[1,-1,1],[1,-1,-1],[-1,1,1],[-1,1,-1],[-1,-1,1],[-1,-1,-1]])
 t = np.array([0.2,0.1,0.5,2,1,0.6,0.8,2])
 #p = np.array([[1.1,1,1],[1,1,-1],[1,-1,1],[1,-1,-1],[-1,1,1],[-1,1,-1],[-1,-1,1],[-1,-1,-1]])
-p = np.array([[1.,1,1],[1,1,-1],[1,-1,1],[1,-1,-1],[-1,1,1],[-1,1,-1],[-1,-1,1],[-1,-1,-1]])
+p = np.array([[1,1,1],[-1,-1.,1],[1,-1,1.],[-1,1,1],[1,1,-1],[-1,-1.,-1],[1,-1,-1.],[-1,1,-1]])
 
 
 #print(inertiaBalance(t,r,p))
+def physicLaw(t):
+    print('t =',t)
+    print('phyLaw = ',min(t))
+    return min(t)
 
 def cons(t):
     return inertiaBalance(t,r,p)
-def testCons(t):
-    return t
+
+def testPossible(t):
+    print('t =',t)
+    print('eq = ',inertiaBalance(t,r,p))
+    return np.concatenate((inertiaBalance(t,r,p),np.array([0,0])),axis=0)
 
 def optimizeF():
-    return minimize(maxTensions,[0.5,6,1,2,1,1,1,0],constraints={'type': 'eq', 'fun': cons}).x
+    return minimize(maxTensions,[4.5, 4.5, 4, 4, 0.1,0.1,0.1,0.1],constraints={'type': 'eq', 'fun': cons}).x
 
 def possible():
-    return fsolve(cons,[1,1,1,1,1,1,1,1])
+    #return minimize(testPossible, [1, 3, 0, 2, 1, 1, 1, 4.],constraints={'type': 'ineq', 'fun': physicLaw}).x
+    return root(testPossible,[4.5, 4.5, 4, 4, 0.1,0.1,0.1,0.1]).x
 
 print(possible())
 
-print(cons([9.49570921,-7.421,1,1,1,1,1,1]))
+#print(optimizeF())
+
