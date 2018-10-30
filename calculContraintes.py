@@ -18,17 +18,21 @@ def basisChange(X,Y,Z,G): # return coordinates in (G,x,y,z) system
 
 
 
-def inertiaBalance(t,r,p): #t is a 8-dim vector containing the 8 Tensions while r is a 8*3 array containing the 8 vectors GMi in the coordinate (x,y,z), p r is a 8*3 array containing the 8
+def inertiaBalance(t,r,p,G): #t is a 8-dim vector containing the 8 Tensions (scalar) while r is a 8*3 array containing the 8 vectors GMi in the coordinate (x,y,z), p is a 8*3 array containing the 8 vectors GPi in the coordonates (x,y,z)
 
-    massCenter = np.array([0,0,-g]) #to change
+    massCenter = basisChange(G[0],G[1],G[2]-g,G) #gravity force in (G,x,y,z)
+    print (basisChange(G[0],G[1],G[2],G))
     for i in range(len(p)):
-        p[i] /= np.linalg.norm(p[i]) #print(p[i]) WARNING causes troubles when p is int array
+        p[i] /= np.linalg.norm((p[i])) #print(p[i]) WARNING causes troubles when p is int array
+        r[i] /= np.linalg.norm((r[i]))
+        
     for i in range(len(t)):
-        massCenter = massCenter + t[i]*p[i] #sum of the Ti
-
+        massCenter += t[i]*(p[i]-r[i]) #sum of the Ti added to the mass center : équation de la mécanique qui doit être nulle à l'équilibre
+        
     angularMomentum = np.array([0,0,0])
+    
     for i in range(len(t)):
-        angularMomentum = angularMomentum + np.cross(r[i],t[i]*p[i])
+        angularMomentum += np.cross(r[i],t[i]*p[i])
 
     #return np.maximum(massCenter,angularMomentum)
     #return max(massCenter)
