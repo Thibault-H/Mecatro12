@@ -26,17 +26,17 @@ def basisChange(X,Y,Z,G): # return coordinates in (G,x,y,z) system, G beeing wri
 
 def inertiaBalance(t,r,P,G): #t is a 8-dim vector containing the 8 Tensions (scalar) while r is a 8*3 array containing the 8 vectors GMi in the coordinate (x,y,z), P is a 8*3 array containing the 8 vectors GPi in the coordonates (X,Y,Z). G (centre d'inertie) is written in the coordonates (X,Y,Z).
 
-    massCenter = basisChange(G[0],G[1],G[2]-g,G) #gravity force in (G,x,y,z)
+    massCenter = basisChange(G[0],G[1],G[2]-g,G) #gravity force in (G,x,y,z) / on calcule à un facteur de masse près 
+#remarque : on peut tout calculer à un facteur m près, constant et positif, qui ne changera pas les positions qui minimisent les tensions dans les câbles 
     for i in range(len(P)):
-        P[i] = basisChange(P[i][0],P[i][1],P[i][2],G)
-        
-    #print (basisChange(G[0],G[1],G[2],G))
-    for i in range(len(P)):
+        P[i] = basisChange(P[i][0],P[i][1],P[i][2],G) # after that, we are working in the (G,x,y,z) system
+
+"""    for i in range(len(P)): #normalisation des vecteurs directeurs 
         P[i] /= np.linalg.norm((P[i])) #print(p[i]) WARNING causes troubles when p is int array
-        r[i] /= np.linalg.norm((r[i]))
+        r[i] /= np.linalg.norm((r[i]))"""
         
     for i in range(len(t)):
-        massCenter += t[i]*(P[i]-r[i]) #sum of the Ti added to the mass center : équation de la mécanique qui doit être nulle à l'équilibre
+        massCenter += t[i]*(np.linalg.norm(P[i]-r[i])) #sum of the Ti added to the mass center : équation de la mécanique qui doit être nulle à l'équilibre
         
     angularMomentum = np.array([0,0,0])
     
@@ -55,36 +55,3 @@ def inertiaBalance(t,r,P,G): #t is a 8-dim vector containing the 8 Tensions (sca
 def maxTensions(t):
     print(sum((t**2)))
     return (sum(t**2))
-
-
-r = np.array([[1,1,1],[1,1,-1],[1,-1,1],[1,-1,-1],[-1,1,1],[-1,1,-1],[-1,-1,1],[-1,-1,-1]])
-t = np.array([0.2,0.1,0.5,2,1,0.6,0.8,2])
-#p = np.array([[1.1,1,1],[1,1,-1],[1,-1,1],[1,-1,-1],[-1,1,1],[-1,1,-1],[-1,-1,1],[-1,-1,-1]])
-p = np.array([[1,1,1],[-1,-1.,1],[1,-1,1.],[-1,1,1],[1,1,-1],[-1,-1.,-1],[1,-1,-1.],[-1,1,-1]])
-
-
-#print(inertiaBalance(t,r,p))
-def physicLaw(t):
-    print('t =',t)
-    print('phyLaw = ',min(t))
-    return min(t)
-
-def cons(t):
-    return inertiaBalance(t,r,p)
-
-def testPossible(t):
-    print('t =',t)
-    print('eq = ',inertiaBalance(t,r,p,(0,0,0)))
-    return np.concatenate((inertiaBalance(t,r,p,(0,0,0)),np.array([0,0])),axis=0)
-
-def optimizeF():
-    return minimize(maxTensions,[4.5, 4.5, 4, 4, 0.1,0.1,0.1,0.1],constraints={'type': 'eq', 'fun': cons}).x
-
-def possible():
-    return minimize(testPossible, [1, 3, 0, 2, 1, 1, 1, 4.],constraints={'type': 'ineq', 'fun': physicLaw}).x
-    return root(testPossible,[4.5, 4.5, 4, 4, 0.1,0.1,0.1,0.1]).x
-
-#print(possible())
-
-#print(optimizeF())
-
