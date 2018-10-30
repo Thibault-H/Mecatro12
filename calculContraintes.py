@@ -20,7 +20,7 @@ def basisChange(X,Y,Z,G): # return coordinates in (G,x,y,z) system
 
 def inertiaBalance(t,r,p): #t is a 8-dim vector containing the 8 Tensions while r is a 8*3 array containing the 8 vectors GMi in the coordinate (x,y,z), p r is a 8*3 array containing the 8
 
-    massCenter = np.array([0,0,-g])
+    massCenter = np.array([0,0,-g]) #to change
     for i in range(len(p)):
         p[i] /= np.linalg.norm(p[i]) #print(p[i]) WARNING causes troubles when p is int array
     for i in range(len(t)):
