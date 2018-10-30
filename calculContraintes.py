@@ -4,7 +4,12 @@ from scipy.optimize import minimize, root
 n = 1.0
 g = 9.81
 
-def basisChange(X,Y,Z,G): # return coordinates in (G,x,y,z) system
+""" Programme d'optimisation des position des accoches des câbles sur la structure fixe et sur la structure mobile """
+
+
+## Basis change from the (X,Y,Z) system to the (G,x,y,z) system
+
+def basisChange(X,Y,Z,G): # return coordinates in (G,x,y,z) system, G beeing written in the (X,Y,Z) system
 
     L = np.sqrt(G[0]**2 + G[1]**2 + G[2]**2)
     l = np.sqrt(G[0] ** 2 + G[1] ** 2)
@@ -15,7 +20,9 @@ def basisChange(X,Y,Z,G): # return coordinates in (G,x,y,z) system
                   [-G[2] * G[0] / l / L, -G[2] * G[1] / l / L, (G[0] ** 2 + G[1] ** 2) / l / L]])
 
     return R.dot(M - G)
-
+    
+    
+## Inertia Balance
 
 def inertiaBalance(t,r,P,G): #t is a 8-dim vector containing the 8 Tensions (scalar) while r is a 8*3 array containing the 8 vectors GMi in the coordinate (x,y,z), P is a 8*3 array containing the 8 vectors GPi in the coordonates (X,Y,Z). G (centre d'inertie) is written in the coordonates (X,Y,Z).
 
@@ -43,6 +50,8 @@ def inertiaBalance(t,r,P,G): #t is a 8-dim vector containing the 8 Tensions (sca
 #def physics(t):
 
 
+## optimisation 
+
 def maxTensions(t):
     print(sum((t**2)))
     return (sum(t**2))
@@ -65,17 +74,17 @@ def cons(t):
 
 def testPossible(t):
     print('t =',t)
-    print('eq = ',inertiaBalance(t,r,p))
-    return np.concatenate((inertiaBalance(t,r,p),np.array([0,0])),axis=0)
+    print('eq = ',inertiaBalance(t,r,p,(0,0,0)))
+    return np.concatenate((inertiaBalance(t,r,p,(0,0,0)),np.array([0,0])),axis=0)
 
 def optimizeF():
     return minimize(maxTensions,[4.5, 4.5, 4, 4, 0.1,0.1,0.1,0.1],constraints={'type': 'eq', 'fun': cons}).x
 
 def possible():
-    #return minimize(testPossible, [1, 3, 0, 2, 1, 1, 1, 4.],constraints={'type': 'ineq', 'fun': physicLaw}).x
+    return minimize(testPossible, [1, 3, 0, 2, 1, 1, 1, 4.],constraints={'type': 'ineq', 'fun': physicLaw}).x
     return root(testPossible,[4.5, 4.5, 4, 4, 0.1,0.1,0.1,0.1]).x
 
-print(possible())
+#print(possible())
 
 #print(optimizeF())
 
