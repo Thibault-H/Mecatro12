@@ -1,68 +1,54 @@
 import numpy as np
+import numpy.linalg
+
 
 g = 9.81
+
+## Basis change from the (X,Y,Z) system to the (G,x,y,z) system
+
+def basisChange(X,Y,Z,G): # return coordinates in (G,x,y,z) system, G beeing written in the (X,Y,Z) system
+
+    L = np.sqrt(G[0]**2 + G[1]**2 + G[2]**2)
+    l = np.sqrt(G[0] ** 2 + G[1] ** 2)
+    M = np.array([X,Y,Z])
+
+    R = np.array([[-G[0] / L, -G[1] / L, -G[2] / L],
+                  [G[1] / l, -G[0] / l, 0],
+                  [-G[2] * G[0] / l / L, -G[2] * G[1] / l / L, (G[0] ** 2 + G[1] ** 2) / l / L]])
+
+    return R.dot(M - G)
+
+### UnitVector Tensions
+
+def unitVectorsTensions(G,P,r): # P est un tableau 8X3, contenant les 8 points
+                                # Pi dans le système de coordonnées (O,X,Y,Z)
+    
+    u = np.zeros((8,3)) # unitVectors
+    
+    for i in range(8):
+        pi = basisChange(P[i][0],P[i][1],P[i][2],G)
+        u[i] = (pi - r[i])/np.linalg.norm(pi - r[i])
+    
+    return(u)
+
 ### Fonction principale
 
-def planTension(X,Y,Z,u1,u2,u3,u4,u5,u6,u7,u8,r1,r2,r3,r4,r5,r6,r7,r8): #ui sont les vecteurs normés directeur des tensions, ri sont les point d'attache des cables sur le robot
+def tensionPlane(G,u,r): # u 8x3 sont les vecteurs normés directeur des tensions, r = 8x3 sont les point d'attache des cables sur le robot
     
-    vecteurGravite = basisChange(0,0,-g,np.array([X,Y,Z]))
+    vecteurGravite = basisChange(0,0,-g,G)) #?????!!!
     
     A = np.zeros((6,8))
     B = np.array([vecteurGravite[0],vecteurGravite[1],vecteurGravite[2],0,0,0])
     
-    A[0][0] = u1[0]
-    A[0][1] = u2[0]
-    A[0][2] = u3[0]
-    A[0][3] = u4[0]
-    A[0][4] = u5[0]
-    A[0][5] = u6[0]
-    A[0][6] = u7[0]
-    A[0][7] = u8[0]
+    for i in range(8):
+        A[0][i] = u[i][0]
+        A[1][i] = u[i][1]
+        A[2][i] = u[i][2]
+        
+        A[3][i] = r[i][1]*u[i][2] - r[i][2]*u[i][1]
+        A[4][i] = r[i][2]*u[i][0] - r[i][0]*u[i][2]
+        A[5][i] = r[i][0]*u[i][1] - r[i][1]*u[i][0]
     
-    A[1][0] = u1[1]
-    A[1][1] = u2[1]
-    A[1][2] = u3[1]
-    A[1][3] = u4[1]
-    A[1][4] = u5[1]
-    A[1][5] = u6[1]
-    A[1][6] = u7[1]
-    A[1][7] = u8[1]
-    
-    A[2][0] = u1[2]
-    A[2][1] = u2[2]
-    A[2][2] = u3[2]
-    A[2][3] = u4[2]
-    A[2][4] = u5[2]
-    A[2][5] = u6[2]
-    A[2][6] = u7[2]
-    A[2][7] = u8[2]
-    
-    A[3][0] = r1[1]*u1[2] - r1[2]*u1[1]
-    A[3][1] = r2[1]*u2[2] - r2[2]*u2[1]
-    A[3][2] = r3[1]*u3[2] - r3[2]*u3[1]
-    A[3][3] = r4[1]*u4[2] - r4[2]*u4[1]
-    A[3][4] = r5[1]*u5[2] - r5[2]*u5[1]
-    A[3][5] = r6[1]*u6[2] - r6[2]*u6[1]
-    A[3][6] = r7[1]*u7[2] - r7[2]*u7[1]
-    A[3][7] = r8[1]*u8[2] - r8[2]*u8[1]
-    
-    A[4][0] = r1[2]*u1[0] - r1[0]*u1[2]
-    A[4][1] = r2[2]*u2[0] - r2[0]*u2[2]
-    A[4][2] = r3[2]*u3[0] - r3[0]*u3[2]
-    A[4][3] = r4[2]*u4[0] - r4[0]*u4[2]
-    A[4][4] = r5[2]*u5[0] - r5[0]*u5[2]
-    A[4][5] = r6[2]*u6[0] - r6[0]*u6[2]
-    A[4][6] = r7[2]*u7[0] - r7[0]*u7[2]
-    A[4][7] = r8[2]*u8[0] - r8[0]*u8[2]
-    
-    A[5][0] = r1[0]*u1[1] - r1[1]*u1[0]
-    A[5][1] = r2[0]*u2[1] - r2[1]*u2[0]
-    A[5][2] = r3[0]*u3[1] - r3[1]*u3[0]
-    A[5][3] = r4[0]*u4[1] - r4[1]*u4[0]
-    A[5][4] = r5[0]*u5[1] - r5[1]*u5[0]
-    A[5][5] = r6[0]*u6[1] - r6[1]*u6[0]
-    A[5][6] = r7[0]*u7[1] - r7[1]*u7[0]
-    A[5][7] = r8[0]*u8[1] - r8[1]*u8[0]
     
     P = A[:6,:6] #submatrix of A
     C = A[:,6] #column 7 of A
