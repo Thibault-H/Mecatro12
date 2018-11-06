@@ -18,6 +18,18 @@ def basisChange(X,Y,Z,G): # return coordinates in (G,x,y,z) system, G beeing wri
 
     return R.dot(M - G)
 
+def basisChangeLinear(X,Y,Z,G): # return coordinates in (G,x,y,z) system, G beeing written in the (X,Y,Z) system
+
+    L = np.sqrt(G[0]**2 + G[1]**2 + G[2]**2)
+    l = np.sqrt(G[0] ** 2 + G[1] ** 2)
+    M = np.array([X,Y,Z])
+
+    R = np.array([[-G[0] / L, -G[1] / L, -G[2] / L],
+                  [G[1] / l, -G[0] / l, 0],
+                  [-G[2] * G[0] / l / L, -G[2] * G[1] / l / L, (G[0] ** 2 + G[1] ** 2) / l / L]])
+
+    return R.dot(M)
+
 ### UnitVector Tensions
 
 def unitVectorsTensions(G,P,r): # P est un tableau 8X3, contenant les 8 points
@@ -31,11 +43,13 @@ def unitVectorsTensions(G,P,r): # P est un tableau 8X3, contenant les 8 points
     
     return(u)
 
+
+
 ### Fonction principale
 
 def tensionPlane(G,u,r): # u 8x3 sont les vecteurs normés directeur des tensions, r = 8x3 sont les point d'attache des cables sur le robot
     
-    vecteurGravite = basisChange(0,0,-g,G)) #?????!!!
+    vecteurGravite = basisChangeLinear(0,0,-g,G))
     
     A = np.zeros((6,8))
     B = np.array([vecteurGravite[0],vecteurGravite[1],vecteurGravite[2],0,0,0])
