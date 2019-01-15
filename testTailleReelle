@@ -24,6 +24,18 @@ def basisChange(X, Y, Z, G):  # return coordinates in (G,x,y,z) system, G beeing
                   [-G[2] * G[0] / l / L, -G[2] * G[1] / l / L, (G[0] ** 2 + G[1] ** 2) / l / L]])
 
     return R.dot(M - G)
+ 
+ 
+ 
+def distanceAutomatic (G, P, r, m=8): #pour travailler sur les positions en automatique : envoie un vecteur contennant les longueurs de chacun des points 
+  
+    u = np.zeros((m, 1))  # unitVectors
+    
+    for i in range(m):
+        pi = basisChange(P[i][0], P[i][1], P[i][2], G)
+        u[i] = np.linalg.norm(pi - r[i])
+    
+    return u 
 
 def unitVectorsTensions(G, P, r, m=8):  # P est un tableau 8X3, contenant les 8 points
     # Pi dans le système de coordonnées (O,X,Y,Z)
