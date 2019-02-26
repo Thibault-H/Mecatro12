@@ -5,8 +5,22 @@ from copy import deepcopy
 from math import sqrt,pi
 from pylab import *
 
+scale = 0.25
+
+#quelques constantes
+
 g =  9.81 #gravity
-m = 50 #mass
+m = 16*scale #mass
+
+DX = 5*scale
+DY = 3.5*scale
+DZ = 4.0*scale
+
+lx = 0.5*scale
+ly = 0.5*scale
+lz = 0.5*scale
+
+hauteurFenetre = 1.075*scale
 
 ## Basis change from the (X,Y,Z) system to the (G,x,y,z) system
 
@@ -20,7 +34,10 @@ def basisChange(X,Y,Z,G): # return coordinates in (G,x,y,z) system, G beeing wri
                   [G[1] / l, -G[0] / l, 0],
                   [-G[2] * G[0] / l / L, -G[2] * G[1] / l / L, (G[0] ** 2 + G[1] ** 2) / l / L]])
 
-    return R.dot(M - G)
+    inter = R.dot(M - G)
+    
+    res = np.array([inter[1],-inter[0],inter[2]])
+    return res
 
 def basisChangeLinear(X,Y,Z,G): # return coordinates in (G,x,y,z) system, G beeing written in the (X,Y,Z) system
 
@@ -31,8 +48,10 @@ def basisChangeLinear(X,Y,Z,G): # return coordinates in (G,x,y,z) system, G beei
     R = np.array([[-G[0] / L, -G[1] / L, -G[2] / L],
                   [G[1] / l, -G[0] / l, 0],
                   [-G[2] * G[0] / l / L, -G[2] * G[1] / l / L, (G[0] ** 2 + G[1] ** 2) / l / L]])
- 
-    return R.dot(M)
+    inter = R.dot(M)
+    
+    res = np.array([inter[1],-inter[0],inter[2]])
+    return res
 
 ### UnitVector Tensions
 
@@ -74,7 +93,7 @@ def tensionPlane(G,u,r): # u 8x3 sont les vecteurs normés directeur des tension
     
     det = np.linalg.det(P)
     
-    if (abs(det)<0.000000001):
+    if (abs(det)<0.00000000000001):
         print("Matrice non inversible")
         print(det)
     
@@ -204,30 +223,45 @@ def determinerVecteursExtreme(u,v,x,tableauOmega,droitesExtremales):
     j1 = -1
     j2 = -1
     
-    for j in range(i1+1,8):
-        if tableauOmega[i1][j]!=-1:
-            j1=j
-    for j in range(i2+1,8):
-        if tableauOmega[i2][j]!=-1:
-            j2=j
     
-    alph1 = tableauOmega[i1][j1][0] + v[i1]
-    beta1 = tableauOmega[i1][j1][1] - u[i1]
+    for j in range(1,8):
+        if (j!=i1):
+            if ((tableauOmega[i1][j]!=-1)or(tableauOmega[j][i1]!=-1)):
+                j1=j
+    for j in range(1,8):
+        if (j!=i2):
+            if ((tableauOmega[i2][j]!=-1)or(tableauOmega[j][i2]!=-1)):
+                j2=j
     
-    if (alph1*u[j1]+beta1*v[j1]+x[j1]>0):
-        vecteurs+= [v[i1],-u[i1]]
+    if (tableauOmega[i1][j1]==-1):
+        point1=tableauOmega[j1][i1]
     else:
-        vecteurs+= [-v[i1],u[i1]]
+        point1=tableauOmega[i1][j1]
     
-    alph2 = tableauOmega[i2][j2][0] + v[i2]
-    beta2 = tableauOmega[i2][j2][1] - u[i2]
-    
-    if (alph1*u[j2]+beta1*v[j2]+x[j2]>0):
-        vecteurs+= [v[i2],-u[i2]]
+    if (tableauOmega[i2][j2]==-1):
+        point2=tableauOmega[j2][i2]
     else:
-        vecteurs+= [-v[i2],u[i2]]
+        point2=tableauOmega[i2][j2]
+    
+    alph1 = point1[0] + v[i1]
+    beta1 = point1[1] - u[i1]
+    
+    if (alph1*u[j1]+beta1*v[j1]+x[j1]>-1e-7):
+        vecteurs.append([v[i1],-u[i1]])
+    else:
+        vecteurs.append([-v[i1],u[i1]])
+
+    
+    alph2 = point2[0] + v[i2]
+    beta2 = point2[1] - u[i2]
+    
+    if (alph2*u[j2]+beta2*v[j2]+x[j2]>-1e-7):
+        vecteurs.append([v[i2],-u[i2]])
+    else:
+        vecteurs.append([-v[i2],u[i2]])
     
     for k in range(2):
+        print(vecteurs[k])
         norme = sqrt(vecteurs[k][0]**2+vecteurs[k][1]**2)
         vecteurs[k] = [vecteurs[k][0]/norme,vecteurs[k][1]/norme]
     return(vecteurs)
@@ -257,8 +291,9 @@ def descriptionConfigurationsPossibles(u,v,x):
     for i in range(8):
         for j in range(i+1,8):
             if tableauOmega[i][j]!=-1:
-                points+=[tableauOmega[i][j]]
+                points.append([tableauOmega[i][j]])
     return(points,vecteurs)
+
 
 ### Projection sur le convexe
 
@@ -347,7 +382,7 @@ G = np.array([-1, 0.1, 0.2], dtype=np.float32)
 
 (listePoints,listeVecteurs),pointsIntersections = descriptionConfigurations(G,P,r)
 
-print(listePoints)
+print(listePoints) #coordonnées dans la base (X,u,v) où (u,v) orthonormée
 
 for ligne in pointsIntersections:
     for point in ligne:
@@ -364,6 +399,18 @@ def estConfigPossible(G,P,r):
     U,V,x= tensionPlane(G,vectorsTensions,r)    
     u,v = orthogonalisation(U,V)
     return(estPositionPossible(u,v,x))
+
+#test
+
+P = np.array([[0, 1, -1], [-2, 1, -1], [0, -1, -1.], [-2, -1, -1],
+              [0, 1, 1], [-2, 1., 1], [0, -1, 1], [-2, -1, 1]], dtype=np.float32)
+
+r = 0.3*np.array([[0, 1, -1], [-1, 0, -1], [1, 0, -1], [0, -1, -1],
+                   [1, 0, 1], [0, 1, 1], [0, -1, 1], [-1, 0, 1]])
+
+G = np.array([-1, 0.1, 0.2], dtype=np.float32)
+
+print(estConfigPossible(G,P,r))
 
 ### Fonction globale donnant la configuration minimsant les tensions, pourvu que la configuration soit possible :
 
@@ -394,6 +441,22 @@ def configOptimale(G,P,r):
     
 print(configOptimale(G,P,r))
 
+
+### Tests sur la possibilité d'une configuration
+
+
+P =  np.array([[DX/2, -DY, -hauteurFenetre], [DX/2, 0, -hauteurFenetre], [-DX/2, 0, -hauteurFenetre], [-DX/2, -DY, -hauteurFenetre],
+              [DX/2, -DY, DZ-hauteurFenetre], [DX/2, 0, DZ-hauteurFenetre], [-DX/2,0, DZ-hauteurFenetre], [-DX/2, -DY, DZ-hauteurFenetre]], dtype=np.float32)
+
+r = 0.5*np.array([[-1, -1, 1],[1, -1, 1], [1, 1, 1], [-1, 1, 1],[-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1]],dtype=np.float32)
+
+G = np.array([0,-DY/2,DZ/2-hauteurFenetre], dtype=np.float32)
+
+#plotPosition(G,P,r)
+
+#print(estConfigPossible(G,P,r))
+print(descriptionConfigurations(G,P,r))
+
 ### tests
 plt.figure()
 P = np.array([[0, 1, -1], [-2, 1, -1], [0, -1, -1.], [-2, -1, -1],
@@ -419,23 +482,27 @@ def testGraphique(G,P,r):
     for point in listePoints:
         plt.plot(point[0],point[1],'.r')
     
-    P1 = configOptimale(G,P,r)
-    
-    plt.plot(P1[0],P1[1],'xm')
-    
-    plt.plot(0,0,'.m')
-    
-    theta = np.linspace(0, 2*pi, 4000)
-    
-    r = sqrt(P1[0]*P1[0]+P1[1]*P1[1])
-    x = r*cos(theta)
-    y = r*sin(theta)
-    plt.plot(x, y)
+    if listePoints!=[]:
+        P1 = configOptimale(G,P,r)
+        
+        plt.plot(P1[0],P1[1],'xm')
+        
+        plt.plot(0,0,'.m')
+        
+        theta = np.linspace(0, 2*pi, 4000)
+        
+        r = sqrt(P1[0]*P1[0]+P1[1]*P1[1])
+        x = r*cos(theta)
+        y = r*sin(theta)
+        plt.plot(x, y)
     
 testGraphique(G,P,r)
 
 
 print(estConfigPossible(G,P,r))
+
+
+
 ### Couverture des positions statiques
 
 #en mètres
@@ -468,26 +535,23 @@ def ensemblePointsTests(xmin,xmax,ymin,ymax,zmin,zmax,nombrePoints): #on aura en
         x+=pasX
     return(l)
 
-print(ensemblePointsTests(0,2,0,2,0,2,3)[0])
 
-def positionsPossibles(listePointsG,P,r):
-    positionsPossibles = [False for G in listePointsG]
+def positionsPossibles(listePointsG,P,r): #renvoie un tableau [nombrePoints^2 [position,tensionOptimale]],tensionMax
+    positionsPossibles = [-1 for G in listePointsG]
     i=0
     tensionMax = -1
     for G in listePointsG:
         if(estConfigPossible(G,P,r)):
-            positionsPossibles[i] = True
             X = configOptimale(G,P,r)
+            positionsPossibles[i] = [G,max(X)]
             if (max(X)>tensionMax):
                 tensionMax = max(X)
         #print(positionsPossibles)
         i+=1
     return(positionsPossibles,tensionMax)
 
-r =  0.1*np.array([[1, 0, -1], [0, 1, -1], [-1, 0, -1], [0, -1, -1],
-              [0, -1, 1], [1, 0, 1], [0, 1, 1], [-1, 0, 1]],dtype=np.float32)
-              
-print(ensemblePointsTests(-1.5,1.5,-2,0,-0.5,2,4))
+r = 0.5*np.array([[-1, -1, 1],[1, -1, 1], [1, 1, 1], [-1, 1, 1],[-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1]],dtype=np.float32)
+
 #print (ensemblePointsTests(-1.5,1.5,-2,0,-0.5,2,4)[2][0], ensemblePointsTests(-1.5,1.5,-2,0,-0.5,2,3)[2][1], ensemblePointsTests(-1.5,1.5,-2,0,-0.5,2,3)[2][2]) 
 print(positionsPossibles (ensemblePointsTests(-1.5,1.5,-2,0,-0.5,2,4), P,r))
 
@@ -501,7 +565,107 @@ def proportionTrue (xmin,xmax,ymin,ymax,zmin,zmax,nombrePoints, P,r):
     return(nombreTrue / N)
 
 
-print(positionsPossibles(ensemblePointsTests(-DX/10,DX/10,DY/2-DY/10,DY/2+DY/10,DZ/2-hauteurFenetre/10,DZ/2+hauteurFenetre/10,3), P,r)[0])
+print(positionsPossibles(ensemblePointsTests(-DX/10,DX/10,-DY/2-DY/10,-DY/2+DY/10,DZ/2-hauteurFenetre/10,DZ/2+hauteurFenetre/10,4), P,r))
 print(proportionTrue(-DX/2,DX/2,-DY,0,-hauteurFenetre,DZ-hauteurFenetre,6,P,r))
 
-        
+### Limiter la tension des cables
+
+P =  np.array([[DX/2, -DY, -hauteurFenetre], [DX/2, 0, -hauteurFenetre], [-DX/2, 0, -hauteurFenetre], [-DX/2, -DY, -hauteurFenetre],
+              [DX/2, -DY, DZ-hauteurFenetre], [DX/2, 0, DZ-hauteurFenetre], [-DX/2,0, DZ-hauteurFenetre], [-DX/2, -DY, DZ-hauteurFenetre]], dtype=np.float32)
+
+r = 0.5*np.array([[-lx, -ly, -lz], [-lx, ly, -lz], [lx, ly, -lz], [lx, -ly, -lz],[-lx, -ly, lz],[-lx, ly, lz], [lx, ly, lz], [lx, -ly, lz]],dtype=np.float32)
+
+def positionTensionLimitées(posPossibles,tensionLim):
+    positions = [] #pour stocker les positions restantes
+    for pos in posPossibles[0]:
+        if (pos!=-1):
+            if pos[1]<tensionLim:
+                positions.append(pos[0])
+    return(positions)
+
+
+l = positionsPossibles(ensemblePointsTests(-DX/2,DX/2,-DY,0,-hauteurFenetre,DZ-hauteurFenetre,10), P,r)
+positionsLimitees = positionTensionLimitées(l,100)
+
+
+
+
+
+
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
+ax.set_xlim3d(-4, 4)
+ax.set_ylim3d(-4, 4)
+ax.set_zlim3d(-4, 4)
+print_3d(P, ax)
+# for point in l[0]:
+#     if point!=-1:
+#         ax.scatter3D(point[0][0],point[0][1],point[0][2],c='b')
+for point in positionsLimitees:
+    ax.scatter3D(point[0],point[1],point[2],c='c')
+plt.show()
+
+### Points d'accroches croisés selon x : 0<->3, 2<->1, 4<->7, 6<->5
+
+P =  np.array([[DX/2, -DY, -hauteurFenetre], [DX/2, 0, -hauteurFenetre], [-DX/2, 0, -hauteurFenetre], [-DX/2, -DY, -hauteurFenetre],
+              [DX/2, -DY, DZ-hauteurFenetre], [DX/2, 0, DZ-hauteurFenetre], [-DX/2,0, DZ-hauteurFenetre], [-DX/2, -DY, DZ-hauteurFenetre]], dtype=np.float32)
+
+r = 0.5*np.array([[-lx, -ly, -lz], [-lx, ly, -lz], [lx, ly, -lz], [lx, -ly, -lz],[-lx, -ly, lz],[-lx, ly, lz], [lx, ly, lz], [lx, -ly, lz]],dtype=np.float32)
+
+e = 0
+
+printPointsAtteignables(ensemblePointsTests(-DX/2+e,DX/2-e,-DY+e,0-e,-hauteurFenetre+e,DZ-hauteurFenetre-e,10), P,r)
+print(positionsPossibles(ensemblePointsTests(-DX/2+e,DX/2-e,-DY+e,0-e,-hauteurFenetre+e,DZ-hauteurFenetre-e,10), P,r)[1])
+
+### Représentation 3D des points atteignables
+
+P =  np.array([[DX/2, -DY, -hauteurFenetre], [DX/2, 0, -hauteurFenetre], [-DX/2, 0, -hauteurFenetre], [-DX/2, -DY, -hauteurFenetre],
+              [DX/2, -DY, DZ-hauteurFenetre], [DX/2, 0, DZ-hauteurFenetre], [-DX/2,0, DZ-hauteurFenetre], [-DX/2, -DY, DZ-hauteurFenetre]], dtype=np.float32)
+
+r = 0.5*np.array([[-1, -1, -1], [1, -1, -1], [1, 1, -1], [-1, 1, -1],[-1, -1, 1],[1, -1, 1], [1, 1, 1], [-1, 1, 1]],dtype=np.float32)
+r = 0.5*np.array([[-1, 1, 1], [1, -1, -1], [1, 1, -1], [-1, -1, 1],[-1, 1, -1],[1, 1, -1], [1, -1, -1], [-1, -1, -1]],dtype=np.float32)
+
+def printPointsAtteignables(listePointsG,P,r):
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    ax.set_xlim3d(-4, 4)
+    ax.set_ylim3d(-4, 4)
+    ax.set_zlim3d(-4, 4)
+    positionsPossibles = [False for G in listePointsG]
+    i=0
+    tensionMax = -1
+    for G in listePointsG:
+        if(estConfigPossible(G,P,r)):
+            ax.scatter(G[0],G[1],G[2],c='g')
+        # else:
+        #     ax.scatter(G[0],G[1],G[2],c='r')
+        #print(positionsPossibles)
+        i+=1
+    print_3d(P, ax)
+    plt.show()
+
+printPointsAtteignables(ensemblePointsTests(-DX/2,DX/2,-DY,0,-hauteurFenetre,DZ-hauteurFenetre,10), P,r)
+    
+
+### Recherche des points d'accroches optimaux
+
+P =  np.array([[DX/2, -DY, -hauteurFenetre], [DX/2, 0, -hauteurFenetre], [-DX/2, 0, -hauteurFenetre], [-DX/2, -DY, -hauteurFenetre],
+              [DX/2, -DY, DZ-hauteurFenetre], [DX/2, 0, DZ-hauteurFenetre], [-DX/2,0, DZ-hauteurFenetre], [-DX/2, -DY, DZ-hauteurFenetre]], dtype=np.float32)
+
+def ensembleConfigTest(xmin,xmax,ymin,ymax,zmin,zmax,nombrePoints): #on veut tester plein de configurations d'accroche
+    l = []
+    nombrePoints-=1
+    x,y,z=xmin,ymin,zmin
+    pasX = (xmax-xmin)/nombrePoints
+    pasY = (ymax-ymin)/nombrePoints
+    pasZ = (zmax-zmin)/nombrePoints
+    for i in range(nombrePoints+1):
+        for j in range(nombrePoints+1):
+            for k in range(nombrePoints+1):
+                l.append(np.array([x,y,z]))
+                z+=pasZ
+            z=zmin
+            y+=pasY
+        y=ymin
+        x+=pasX
+    return(l)
