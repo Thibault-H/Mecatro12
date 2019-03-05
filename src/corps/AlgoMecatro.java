@@ -45,7 +45,7 @@ public class AlgoMecatro {
 	  public static void main(String[] args) {
 		  Mecatro mec = new Mecatro(10);
 		  Raytracing r = new Raytracing();
-		  ObjetMecatro m = new MiroirRectangle(R3.ux, Point3.origine.moins(R3.ux), 20, 20);
+		  ObjetMecatro m = new MiroirRectangle("Miroir 1 ",R3.ux, Point3.origine.moins(R3.ux), 20, 20);
 		  mec.ajouter(m, r);
 		  
 		  Point3 pt1 = Point3.origine.plus(R3.ux);

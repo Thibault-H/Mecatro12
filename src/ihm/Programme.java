@@ -41,8 +41,8 @@ public class Programme implements ActionListener, ItemListener{
     mode = m;
     switch (mode) {
     case Raytracing:
-    	r.ajouter(new Sphere( Point3.origine.plus(new R3(-3,4,0)), 3, Color.red ));
-        r.ajouter(new Sphere( Point3.origine.plus(new R3(2,4,0)), 2, Color.blue ));
+    	r.ajouter(new Sphere( "Sphere1", Point3.origine.plus(new R3(-3,4,0)), 3, Color.red ));
+        r.ajouter(new Sphere( "Sphere2", Point3.origine.plus(new R3(2,4,0)), 2, Color.blue ));
 	    //Cube c =new Cube(Point3.origine.plus(new R3(0,4,0)), 3, M3.id, Color.red );
 	    //c.tourner(R3.uz,Math.PI/4);
 	    //r.ajouter(c);
@@ -50,7 +50,7 @@ public class Programme implements ActionListener, ItemListener{
         break;
     case Miroirs:
     	r.ajouter(mec.getScene().getSource());
-    	mec.ajouter(new MiroirRectangle(R3.ux.opp(), Point3.origine.moins(R3.ux.prod(50)),200,200),r);
+    	mec.ajouter(new MiroirRectangle("Miroir 1" ,R3.ux.opp(), Point3.origine.moins(R3.ux.prod(50)),200,200),r);
     	break;
     default:
     	break;

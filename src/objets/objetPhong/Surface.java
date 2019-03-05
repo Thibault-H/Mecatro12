@@ -1,6 +1,7 @@
 package objets.objetPhong;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 import algLin.Point3;
@@ -19,20 +20,83 @@ public abstract class Surface extends ObjetRaytracing implements Editable{
   CouleurS[] listeCouleurs;
   SurfMath surf;
   
-  Map<String,Entrable> attributs = new HashMap<String,Entrable>();
-  
+  /**La liste des attributs de la surface. A tout instant en dehors du corps d'une méthode,
+   * ce dictionnaire est la copie conforme des attributs de l'instance en cours.
+   */
+  protected Map<String,Entrable> attributs = new HashMap<String,Entrable>();
+  private String nom;
   
   double kd=0.75;
   double ks=0.5;
   double s=100;
 
+  
+  public Surface(String name) {
+	  nom=new String(name);
+  }
+  
+  
+  
+  public String getNom() {
+	  return new String(nom);
+  }
+  
+  public SurfMath getSurfMath() {
+	  return surf;
+  }
+  
+  //===============================================
+  // Methodes d'édition
+  
+  
   @Override
   public Map<String,Entrable> getAttributsEditables() {
-	  return attributs;
+	  return new HashMap<String,Entrable>(attributs);
   }
-  //Methodes geometriques
   
-
+  @Override
+  public boolean reconstruireAvecAttributs(Map<String, Entrable> inputAttributs) {
+	  if ( attributs.keySet().equals(inputAttributs.keySet()) ){	// 1ere vérification de compatibilité des attributs
+		  boolean isConformable= true;	// Vérifions que les entrées sont de types compatibles
+		  Iterator<String> itr = attributs.keySet().iterator();
+		  String tmp;
+		  while (isConformable && itr.hasNext()) {
+			  tmp=itr.next();
+			  isConformable = attributs.get(tmp).conformerA(inputAttributs.get(tmp)); 
+		  }
+		  if (isConformable) {	//vrai ssi l'opération s'est faite sans heurt, i.e si toutes les entrees sont reconnues et de type compatible. Dans ce cas, attributs a été actualisé conformément à inputAttributs
+			  maj();	//on actualise les attributs de l'instance
+			  return true;
+		  }
+		  else {
+			  majListeAttributs(); //on annule les éventuels changements qui sont arrivés à attributs pendant le test précédent
+			  return false;
+		  } 
+	  }
+	  else return false;
+  }
+  
+  /**
+   * Met à jour le dictionnaire attributs au vu des attributs actuels.
+   * (à appeler si les attributs de l'instance sont modifiés)
+   */
+  public abstract void majListeAttributs();
+	
+  /**
+   * Met à jour les attributs de l'instance au vu du dictionnaire d'attributs. 
+   * Son comportement géométrique et optique est lui aussi actualisé.
+   * (à appeler dans reconstruireAvecAttributs, par exemple)
+   */
+  public abstract void maj();
+  
+  
+  
+  //====================================================
+  //====================== Rendu =======================
+  //====================================================
+  
+  //Methodes de geometrie
+  
   public double dist(Point3 m, R3 d) {    //d est normÃ©
     return surf.dist(m, d);
   }
@@ -60,7 +124,7 @@ public abstract class Surface extends ObjetRaytracing implements Editable{
   
   public R3 getValueCouleurIntra(Point3 m) {
     CouleurS r = getCouleurIntra(m);
-    return new R3(r.getValue().getRed(),r.getValue().getGreen(),r.getValue().getBlue());
+    return new R3(r.getColor().getRed(),r.getColor().getGreen(),r.getColor().getBlue());
   }
   
   
@@ -85,12 +149,10 @@ public abstract class Surface extends ObjetRaytracing implements Editable{
     }
   }
   
-  public SurfMath getSurfMath() {
-	  return surf;
-  }
-
   
   
+  
+  @Override
   public CouleurL getColor(Point3 m, R3 d) {
       CouleurL lumTot = sc.getAmbiant().getCouleurL();
       CouleurL lumTotSpec = CouleurL.noir;
@@ -113,18 +175,17 @@ public abstract class Surface extends ObjetRaytracing implements Editable{
         System.out.print("");*/
       return (getCouleurIntra(m).getResultante(lumTot)).plus(lumTotSpec);
     }
-  
-  
-  
+    
+  @Override
   public CouleurL getColor(Point3 m, R3 d, int ref) {
     return getColor(m,d).plus(refMiroir(m,d,ref));
   }
 
-
-
-
+  @Override
   public CouleurL getColorSimple(Point3 m, R3 d) {
       return getCouleurIntra(m).getResultante(sc.getAmbiant().getCouleurL());
   }
+  
+  
   
 }

@@ -3,8 +3,8 @@ package objets;
 
 import algLin.Point3;
 import algLin.R3;
-import ihm.ModifierObjet;
 import objetmaths.surfacemaths.SurfMath;
+import objets.editable.ModifierObjet;
 import objets.scene.ObjetDansScene;
 import objets.scene.SceneRaytracing;
 import ihm.Fenetre1;

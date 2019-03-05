@@ -22,8 +22,8 @@ public class MiroirRectangle extends ObjetMecatro{
 
 	
 
-	public MiroirRectangle(R3 n, Point3 centre, double longueur, double largeur) {
-		forme = new Rectangle(n, centre, largeur, longueur, Color.RED);
+	public MiroirRectangle(String nom, R3 n, Point3 centre, double longueur, double largeur) {
+		forme = new Rectangle(nom,n, centre, largeur, longueur, Color.RED);
 		domaineAction = new RienIllumine();
 	}
 	

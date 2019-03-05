@@ -6,12 +6,12 @@ import corps.Parametres;
 import objets.editable.Entrable;
 import objets.editable.TypeEntrable;
 
-/** La classe R3 sert à implémenter les vecteurs de R3.
+/** La classe Vecteur sert à implémenter les vecteurs de Vecteur.
  * 
  * @author Adel
  *
  */
-public class R3 implements Serializable, TesteurNullite, Entrable{
+public class R3 implements Serializable, TesteurNullite{
   
   /**
    * 
@@ -82,15 +82,23 @@ public class R3 implements Serializable, TesteurNullite, Entrable{
     z=c;
   }
   
+  /**
+   * Sert dans la m�thode "conformerA"
+   * @param e
+   */
+  private R3(Entrable e) {
+    x=((R3)e).get1();
+    y=((R3)e).get2();
+    z=((R3)e).get3();
+  }
+  
   public R3(R3 v) {
-    x=v.get1();
-    y=v.get2();
-    z=v.get3();
+	  this((Entrable)v);
   }
   
   public R3(double[] tab) {
     if (tab.length != 3) 
-      throw new IllegalArgumentException("On ne peut pas faire de vecteur de R3 aavec ce tableau!");
+      throw new IllegalArgumentException("On ne peut pas faire de vecteur de Vecteur aavec ce tableau!");
     else {
       x=tab[0];
       y=tab[1];
@@ -364,12 +372,13 @@ public class R3 implements Serializable, TesteurNullite, Entrable{
     else return b;
   }
   
+
   @Override
-  public TypeEntrable getTypeEntrable() {
-  	return TypeEntrable.Vecteur;
+  public int hashCode() {
+	  return (int)(x+10*y+100*z);
   }
   
-  
+  @Override
   public boolean equals(Object o){
     if (o instanceof R3)
       return ( estNul((moins((R3) o)).norme2()));

@@ -31,6 +31,7 @@ public class Quaternion implements TesteurNullite{
 	/**
 	 * Definir un quaternion avec ses coordonnees polaires, si estPolaire == true.
 	 * Par défaut, estPolaire == false ; dans ce cas, "alpha" et "axe" sont respectivement la partie re et im du quaternion
+	 * Remarque : si estPolaire == true, le vecteur axe est ramene a un vecteur norme
 	 * @param alpha
 	 * @param axe
 	 * @param estPolaire
@@ -45,7 +46,7 @@ public class Quaternion implements TesteurNullite{
 		}
 		else {
 			partieRe = Math.cos(alpha/2);
-			partieIm = axe.normer().prod(Math.cos(alpha/2));	
+			partieIm = axe.normer().prod(Math.sin(alpha/2));	
 		}	
 
 		valeur[0] = partieRe;
@@ -59,6 +60,13 @@ public class Quaternion implements TesteurNullite{
 	}
 	
 	
+	/**
+	 * Fait agir le quaternion sur SO(3), plongé dans H, canoniquement par conjugaison
+	 * h |-> qhq^-1
+	 * Si le quaternion est unitaire, cela revient a appliquer une rotation.
+	 * @param v
+	 * @return
+	 */
 	public R3 agirSur(R3 v) {
 		Quaternion q = new Quaternion(0,v);
 		return fois(q).fois(inv()).getPartieIm();
@@ -144,7 +152,7 @@ public class Quaternion implements TesteurNullite{
 	
 	
 	public static void main(String[] args) {
-		Quaternion rot1 = new Quaternion(0, R3.uz);
+		Quaternion rot1 = new Quaternion(Math.PI/2, R3.uz, true);
 		System.out.println(rot1);
 		R3 v = R3.ux;
 		System.out.println(rot1.agirSur(v));

@@ -9,11 +9,17 @@ import objetmaths.volumemaths.VolumeMath;
 import optique.*;
 
 public abstract class MiroirPhong extends Surface {
+	
 	CouleurS[] listeCouleurs = {new CouleurS(Color.WHITE)};
 	
 	final double kd=0;		
 	double ks=1;
-	final double s = Integer.MAX_VALUE;	
+	final double s = Integer.MAX_VALUE;
+	
+	public MiroirPhong(String name) {
+		super(name);
+		// TODO Auto-generated constructor stub
+	}
 	
 	public abstract VolumeMath domaineIllumine(SourcePonctuelleIsotrope s);
 	

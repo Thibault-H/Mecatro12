@@ -1,4 +1,4 @@
-package ihm;
+package objets.editable;
 
 import java.awt.Button;
 import java.awt.Frame;
@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import algLin.Point3;
 import algLin.R3;
+import ihm.Fenetre1;
 import objetmaths.surfacemaths.CubeMath;
 import objets.ObjetRaytracing;
 import objets.ihmEditionObjet.EntreeAngle;
@@ -114,7 +115,7 @@ public class ModifierObjet extends Frame{
       
       
       EntreeCoul eCoul = new EntreeCoul(false,fen.p);
-      eCoul.setCouleur(((Plan)o).getCouleurIntra(Point3.origine).getValue());
+      eCoul.setCouleur(((Plan)o).getCouleurIntra(Point3.origine).getColor());
       
       
       
@@ -162,7 +163,7 @@ public class ModifierObjet extends Frame{
       
       
       EntreeCoul eCoul = new EntreeCoul(false,fen.p);
-      eCoul.setCouleur(((Sphere)o).getCouleurIntra(Point3.origine).getValue());
+      eCoul.setCouleur(((Sphere)o).getCouleurIntra(Point3.origine).getColor());
       
       
       
@@ -213,7 +214,7 @@ public class ModifierObjet extends Frame{
       eAngle.setJoystick(true);
       
       EntreeCoul eCoul = new EntreeCoul(false,fen.p);
-      eCoul.setCouleur(((CubepasFini)o).getCouleurIntra(Point3.origine).getValue());
+      eCoul.setCouleur(((CubepasFini)o).getCouleurIntra(Point3.origine).getColor());
       
       
       

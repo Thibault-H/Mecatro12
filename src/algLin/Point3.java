@@ -12,7 +12,7 @@ import objets.objetPhong.Sphere;
  * @author Adel
  *
  */
-public class Point3 implements Serializable, Entrable{
+public class Point3 implements Serializable{
 
   /**
    * 
@@ -115,6 +115,14 @@ public class Point3 implements Serializable, Entrable{
     return pos.toStringHor();
   }
   
+  @Override
+  public int hashCode() {
+	  return pos.hashCode();
+  }
+  
+  
+  
+  @Override
   public boolean equals(Object b) {
     if (b instanceof Point3)
       return Vecteur((Point3)b).norme2car()<Parametres.h*Parametres.h;
@@ -139,10 +147,10 @@ public static boolean estOrientationPositive(R3 normale, Point3 m, Point3 p1, Po
 	
 }
   
- @Override
-public TypeEntrable getTypeEntrable() {
-	return TypeEntrable.Point;
-}
+
+
+
+
 
 
 public static void main(String[] args) {

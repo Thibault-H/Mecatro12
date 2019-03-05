@@ -22,6 +22,7 @@ import ihm.fenetre1.OngletObjet;
 import ihm.fenetreImage.ImageScrollPane;
 import ihm.util.EcouteurPourFermetureFenetre;
 import ihm.util.MenuSauverOuvrir;
+import objets.editable.ModifierObjet;
 import objets.ihmEditionObjet.DoubleJoystick;
 import objets.ihmEditionObjet.Sure;
 import objets.objetPhong.CubepasFini;
@@ -166,21 +167,21 @@ public class Fenetre1 extends Frame implements ActionListener{
       Point3 pointDevant= par.getOeil().plus(par.getDirection().prod(5+par.getEcart()));
       switch(onglet3.listeNouv.getSelectedItem()) {
       case "Plan":
-        Plan pl =new Plan(par.getDirection(),pointDevant , Color.black);
+        Plan pl =new Plan("Plan 1", par.getDirection(),pointDevant , Color.black);
         p.r.ajouter(pl);
         onglet3.AjouterSurf(pl);
         afficherImage();
         new ModifierObjet(this, p.r.getScene().getSurfs()[p.r.getScene().getSurfs().length - 1]);     
         break;
       case "Sphere":
-        Sphere sp = new Sphere(pointDevant, 2, Color.black);
+        Sphere sp = new Sphere("Sphere 1",pointDevant, 2, Color.black);
         p.r.ajouter(sp);
         onglet3.AjouterSurf(sp);
         afficherImage();
         new ModifierObjet(this, p.r.getScene().getSurfs()[p.r.getScene().getSurfs().length - 1]);     
         break;
       case "Cube":
-        CubepasFini cu = new CubepasFini(pointDevant, 2, Color.black);
+        CubepasFini cu = new CubepasFini("Cube 1 ",pointDevant, 2, Color.black);
         p.r.ajouter(cu);
         onglet3.AjouterSurf(cu);
         afficherImage();

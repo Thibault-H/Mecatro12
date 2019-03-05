@@ -1,28 +1,28 @@
 package objets.objetPhong;
 
 import java.awt.Color;
+
 import algLin.M3;
 import algLin.Point3;
 import algLin.R3;
-import objetmaths.surfacemaths.CubeMath;
 import objetmaths.surfacemaths.CubeMath2;
-import objetmaths.surfacemaths.Degre1;
 import objets.AFaireTourner;
 import objets.TourneAutour;
-import objets.scene.ObjetDansScene;
 import optique.CouleurS;
 
 public class CubepasFini extends Surface implements TourneAutour, AFaireTourner{
 
   
   
-  public CubepasFini(Point3 p, double cote, M3 b,  Color c) {
+  public CubepasFini(String name, Point3 p, double cote, M3 b,  Color c) {
+	super(name);
     surf=new CubeMath2(p,cote,b);
     listeCouleurs = new CouleurS[] {new CouleurS(c)};
   }
  
   
-  public CubepasFini(Point3 p, double cote,  Color c) {
+  public CubepasFini(String name, Point3 p, double cote,  Color c) {
+	super(name);
     surf=new CubeMath2(p,cote,M3.id);
     listeCouleurs = new CouleurS[] {new CouleurS(c)};
   }
@@ -91,6 +91,20 @@ public class CubepasFini extends Surface implements TourneAutour, AFaireTourner{
 
 @Override
 public void faireTourner(double val, R3 axe) {
+	// TODO Auto-generated method stub
+	
+}
+
+
+@Override
+public void majListeAttributs() {
+	// TODO Auto-generated method stub
+	
+}
+
+
+@Override
+public void maj() throws ClassCastException {
 	// TODO Auto-generated method stub
 	
 }
