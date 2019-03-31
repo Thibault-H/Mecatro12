@@ -5,7 +5,7 @@ import java.awt.Color;
 import algLin.Point3;
 import algLin.R3;
 import objetmaths.surfacemaths.RectangleMath;
-import objets.ObjetMecatro;
+import objets.MiroirMecatro;
 import objets.objetPhong.Rectangle;
 import objets.objetPhong.Surface;
 import objets.scene.SceneMecatro;
@@ -13,7 +13,7 @@ import objets.scene.SceneMecatro;
 /*Miroir Rectangle avec une unique source ponctuelle en 0
  * 
  */
-public class MiroirRectangle extends ObjetMecatro{
+public class MiroirRectangle extends MiroirMecatro{
 
 	/**
 	 * 
@@ -28,11 +28,13 @@ public class MiroirRectangle extends ObjetMecatro{
 	}
 	
 	
+	@Override
 	public void setScene(SceneMecatro s) {
 		sc=s;
 		domaineAction = new DomaineIlluminePyramide(sc.source, (RectangleMath)forme.getSurfMath());
 	}
 	
+	@Override
 	public Surface getSurfacePhong() {
 		return forme;
 	}

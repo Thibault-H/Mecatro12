@@ -50,7 +50,8 @@ public class CubepasFini extends Surface implements TourneAutour, AFaireTourner{
   }
   
   
-  public String toString() {
+  @Override
+public String toString() {
     return String.format("Cube : { Cote = %.3g ; Centre = %s", ((CubeMath2)surf).getCote(),((CubeMath2) surf).getCentre() );
   }
 

@@ -1,4 +1,4 @@
-package objets.ihmEditionObjet;
+package objets.ihmEditionObjet.vieux;
 
 import java.awt.Button;
 import java.awt.FlowLayout;
@@ -26,7 +26,8 @@ public class DoubleJoystick extends Panel{
     
   }
   
-  public void setEnabled(boolean bool) {
+  @Override
+public void setEnabled(boolean bool) {
     
   }
   

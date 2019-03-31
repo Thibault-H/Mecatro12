@@ -3,10 +3,6 @@ package optique;
 import java.awt.Color;
 import java.io.Serializable;
 
-import algLin.R3;
-import objets.editable.Entrable;
-import objets.editable.TypeEntrable;
-
 public class CouleurS implements Serializable{
   /**
    * 

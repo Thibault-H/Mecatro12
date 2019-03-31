@@ -7,13 +7,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.image.BufferedImage;
-
-
 import algLin.Point3;
 import algLin.R3;
 import corps.Mecatro;
 import corps.Raytracing;
+import objets.ihmEditionObjet.FenetreEntree;
 import objets.objetMecatro.MiroirRectangle;
 import objets.objetPhong.Sphere;
 import optique.SourcePonctuelleIsotrope;
@@ -37,7 +35,7 @@ public class Programme implements ActionListener, ItemListener{
   
   public Programme(Mode m) {
     r=new Raytracing();
-    mec=new Mecatro(100);
+    mec=new Mecatro(10);
     mode = m;
     switch (mode) {
     case Raytracing:
@@ -46,11 +44,11 @@ public class Programme implements ActionListener, ItemListener{
 	    //Cube c =new Cube(Point3.origine.plus(new R3(0,4,0)), 3, M3.id, Color.red );
 	    //c.tourner(R3.uz,Math.PI/4);
 	    //r.ajouter(c);
-        r.ajouter(new SourcePonctuelleIsotrope(Point3.origine.plus(new R3(0,1,1)) , 5));
+        r.ajouter(new SourcePonctuelleIsotrope("Source 1",Point3.origine.plus(new R3(0,1,1)) , 5));
         break;
     case Miroirs:
-    	r.ajouter(mec.getScene().getSource());
-    	mec.ajouter(new MiroirRectangle("Miroir 1" ,R3.ux.opp(), Point3.origine.moins(R3.ux.prod(50)),200,200),r);
+    	//r.ajouter(mec.getScene().getSource());
+    	//mec.ajouter(new MiroirRectangle("Miroir 1" ,R3.ux.opp(), Point3.origine.moins(R3.ux.prod(5)),10,10),r);
     	break;
     default:
     	break;
@@ -66,7 +64,8 @@ public class Programme implements ActionListener, ItemListener{
   }
   
   
-  public void itemStateChanged(ItemEvent arg0) {
+  @Override
+public void itemStateChanged(ItemEvent arg0) {
     // TODO Auto-generated method stub
     
   }
@@ -77,17 +76,13 @@ public class Programme implements ActionListener, ItemListener{
       refCamera=r.getParam().getOeil();
   }
 
-  public void actionPerformed(ActionEvent e) {
+  @Override
+public void actionPerformed(ActionEvent e) {
     if (e.getSource()==f1.commencer || e.getSource()==f1.menuCommencer) {
-      f2=new Fenetre2(this);
+      agir(TypeAction.LancerFenetre2);
     }
     else if (e.getSource() instanceof Button){
-      int action= f1.joyPrinc.AFaire((Button) e.getSource());
-      r.getParam().setOeil(r.getParam().getOeil().transformation(action, incrtrans, incrrot, r.getParam().getBase(), refCamera));
-      majRefCam();
-      r.getParam().setBase(r.getParam().getBase().transformation(action, incrrot, r.getParam().getBase(), Point3.origine));
-      f1.afficherImage();
-      f1.repaint();
+      agir(TypeAction.FaireReagirCameraAuJoystick, f1.joyPrinc.AFaire((Button) e.getSource()) );
     }
   }
   
@@ -104,6 +99,45 @@ public class Programme implements ActionListener, ItemListener{
 	    }
 	  return result;
   }*/
+  
+  
+  
+  public void agir(TypeAction act, Object... args) {
+	  switch (act) {
+	  case LancerFenetre2 : f2=new Fenetre2(this);
+	  	break;
+	  case FaireReagirCameraAuJoystick: 					//en arguments: un entier qui rpz la reaction du joystick
+		  int typeReaction = (int) args[0];
+	      r.getParam().setOeil(r.getParam().getOeil().transformation(typeReaction, incrtrans, incrrot, r.getParam().getBase(), refCamera));
+	      majRefCam();
+	      r.getParam().setBase(r.getParam().getBase().transformation(typeReaction, incrrot, r.getParam().getBase(), Point3.origine));
+	      f1.afficherImage();
+	      f1.repaint();
+	   break;
+	   
+	  case LireOnglet1:
+	        if ((boolean)args[0]) {//On Ã©dite la hauteur
+	            r.getParam().aggrandirHJusque(f1.onglet1.getHaut());
+	            f1.onglet1.larg.setText(String.valueOf(r.getParam().getLargpx()));        
+	          }
+	          else {//On édite la largeur
+	            r.getParam().aggrandirLJusque(f1.onglet1.getLarg());
+	            f1.onglet1.haut.setText(String.valueOf(r.getParam().getHautpx()));
+	          }
+	          
+	          formatImage=f1.onglet1.getFormat();
+	   break;    
+	  case ModifierObjet :
+		  new FenetreEntree(r.getScene().getListeObjetsEditables()[ (int) args[0]]);
+		  break;
+	 /* case ModifierSource:
+		  new FenetreEntree(r.getScene().getSources()[ (int) args[0]]);
+		  break;
+	  case Supprimer*/
+	  }
+	  
+  }
+  
     
   public static void main(String[] args) {
     ChoixDuMode c = new ChoixDuMode();

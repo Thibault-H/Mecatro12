@@ -19,6 +19,7 @@ public abstract class SurfacePlaneConvexe implements SurfMath, AFaireTourner{
 	protected abstract boolean estDedans(Point3 m);
 	
 	
+	@Override
 	public double dist(Point3 m, R3 d) {
 		double l = planBase.dist(m, d);
 		if (l< Double.POSITIVE_INFINITY) {
@@ -32,5 +33,6 @@ public abstract class SurfacePlaneConvexe implements SurfMath, AFaireTourner{
 			return Double.POSITIVE_INFINITY;
 	}
 	
+	@Override
 	public abstract M3 getBaseRef() ;
 }

@@ -3,7 +3,7 @@ package corps;
 import algLin.Point3;
 import algLin.R3;
 import objets.ObjetRaytracing;
-import objets.scene.SceneRaytracing;
+import objets.scene.Stageable;
 import optique.CouleurL;
 import optique.Photon;
 
@@ -12,7 +12,7 @@ public class AlgoRaytracing {
 	  Raytracing r;
 	  R3 dir;
 	  ParametresRaytracing par;
-		SceneRaytracing s;
+		Stageable s;
 	  
 	  
 
@@ -30,6 +30,6 @@ public class AlgoRaytracing {
 	  public CouleurL getCouleurPixel() {
 	    Photon p= new Photon(pointDepart, s);
 	    ObjetRaytracing renc = p.avancer(dir);
-	    return renc.getColor(p.position, dir,par.getMiroir());
+	    return renc.getColor(p.getPosition(), dir,s, par.getMiroir());
 	  }
 }

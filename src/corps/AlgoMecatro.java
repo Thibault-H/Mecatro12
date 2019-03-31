@@ -1,15 +1,11 @@
 package corps;
 
-import java.awt.Color;
-
 import algLin.Point3;
 import algLin.R3;
-import objets.ObjetMecatro;
-import objets.ObjetRaytracing;
+import objets.MiroirMecatro;
 import objets.objetMecatro.MiroirRectangle;
 import objets.scene.SceneMecatro;
 import optique.CouleurL;
-import optique.Photon;
 
 public class AlgoMecatro {
 
@@ -32,20 +28,22 @@ public class AlgoMecatro {
 	  
 	  private CouleurL getCouleurPoint(Point3 pt) {
 		  double result= 0;
-		    for (ObjetMecatro m : s.listesurfs)
+		    for (MiroirMecatro m : s.listesurfs)
 		    	result+=(m.getIntensiteRecue(pt));
 		    return s.getSource().getCouleurL().multiplieIntensite(result);
 	  }
 	  
+	  
 	  public CouleurL getCouleurPixel() {
-	    return(getCouleurPoint( par.pixToPoint3(larg, haut,  Point3.origine.plus(R3.ux.prod(50)) ,R3.ux)));
+		  //Faut chercher le point du plan observé correspondant au pixel
+	    return(getCouleurPoint( par.pixToPoint3(larg, haut,  Point3.origine.plus(R3.ux.prod(1)) ,R3.ux)));
 
 	  } 
 	  
 	  public static void main(String[] args) {
-		  Mecatro mec = new Mecatro(10);
+		  Mecatro mec = new Mecatro(1000);
 		  Raytracing r = new Raytracing();
-		  ObjetMecatro m = new MiroirRectangle("Miroir 1 ",R3.ux, Point3.origine.moins(R3.ux), 20, 20);
+		  MiroirMecatro m = new MiroirRectangle("Miroir 1 ",R3.ux, Point3.origine.moins(R3.ux.prod(2)), 20, 20);
 		  mec.ajouter(m, r);
 		  
 		  Point3 pt1 = Point3.origine.plus(R3.ux);

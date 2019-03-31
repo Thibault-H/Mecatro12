@@ -1,27 +1,23 @@
 package ihm.fenetre1;
 
 import java.awt.Button;
-import java.awt.Checkbox;
 import java.awt.Choice;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.Label;
 import java.awt.List;
 import java.awt.Panel;
-import java.awt.TextField;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+
 import javax.swing.JLabel;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import ihm.Fenetre1;
 import ihm.util.MultiLineLabel;
-import objets.ObjetRaytracing;
+import objets.objetPhong.Surface;
 import optique.Source;
 
 public class OngletObjet extends Panel implements ItemListener, ActionListener{
@@ -42,7 +38,7 @@ public class OngletObjet extends Panel implements ItemListener, ActionListener{
   public Button modifierObj;
   public Button modifierSou;
   
-  ObjetRaytracing[] tabsu;
+  Surface[] tabsu;
   Source[] tabso;
   
   Fenetre1 f;
@@ -73,7 +69,7 @@ public class OngletObjet extends Panel implements ItemListener, ActionListener{
     listeSources=new List(5,false);
     listeSources.addItemListener(this);
     
-    tabsu = fen.p.r.getScene().getSurfs();  
+    tabsu = fen.p.r.getScene().getListeObjetsEditables();  
     for (int i=0; i< tabsu.length; i++)
       listeObjets.add((i+1) + " "+ tabsu[i].getClass().getName().substring(7));
 
@@ -174,13 +170,13 @@ public class OngletObjet extends Panel implements ItemListener, ActionListener{
   }
 
   //*On suppose qu'on a déjà ajouté l'objet dans le programme
-  public void AjouterSurf(ObjetRaytracing o) {
-    tabsu = f.p.r.getScene().getSurfs();  
+  public void AjouterSurf(Surface o) {
+    tabsu = f.p.r.getScene().getListeObjetsEditables();  
     listeObjets.add((listeObjets.getItemCount()+1) + " "+ tabsu[tabsu.length-1].getClass().getName().substring(7));
   }
   
   //*On suppose qu'on a déjà ajouté la source dans le programme
-  public void AjouterSource(ObjetRaytracing o) {
+  public void AjouterSource(Surface o) {
     tabso = f.p.r.getScene().getSources();  
     listeSources.add((listeSources.getItemCount()+1) + " "+ tabso[tabso.length-1].getClass().getName().substring(7));
   }

@@ -44,7 +44,6 @@ import javax.swing.text.*;
 import java.awt.*;              //for layout managers and more
 import java.awt.event.*;        //for action events
 
-import java.net.URL;
 import java.io.IOException;
 
 public class TextSamplerDemo extends JPanel
@@ -120,7 +119,7 @@ public class TextSamplerDemo extends JPanel
         textArea.setWrapStyleWord(true);
         JScrollPane areaScrollPane = new JScrollPane(textArea);
         areaScrollPane.setVerticalScrollBarPolicy(
-                        JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+                        ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         areaScrollPane.setPreferredSize(new Dimension(250, 250));
         areaScrollPane.setBorder(
             BorderFactory.createCompoundBorder(
@@ -133,7 +132,7 @@ public class TextSamplerDemo extends JPanel
         JEditorPane editorPane = createEditorPane();
         JScrollPane editorScrollPane = new JScrollPane(editorPane);
         editorScrollPane.setVerticalScrollBarPolicy(
-                        JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+                        ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         editorScrollPane.setPreferredSize(new Dimension(250, 145));
         editorScrollPane.setMinimumSize(new Dimension(10, 10));
 
@@ -141,7 +140,7 @@ public class TextSamplerDemo extends JPanel
         JTextPane textPane = createTextPane();
         JScrollPane paneScrollPane = new JScrollPane(textPane);
         paneScrollPane.setVerticalScrollBarPolicy(
-                        JScrollPane.VERTICAL_SCROLLBAR_ALWAYS);
+                        ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         paneScrollPane.setPreferredSize(new Dimension(250, 155));
         paneScrollPane.setMinimumSize(new Dimension(10, 10));
 
@@ -190,7 +189,8 @@ public class TextSamplerDemo extends JPanel
         }
     }
 
-    public void actionPerformed(ActionEvent e) {
+    @Override
+	public void actionPerformed(ActionEvent e) {
         String prefix = "You typed \"";
         if (textFieldString.equals(e.getActionCommand())) {
             JTextField source = (JTextField)e.getSource();
@@ -339,7 +339,8 @@ public class TextSamplerDemo extends JPanel
         //Schedule a job for the event dispatching thread:
         //creating and showing this application's GUI.
         SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+            @Override
+			public void run() {
                  //Turn off metal's use of bold fonts
 		UIManager.put("swing.boldMetal", Boolean.FALSE);
 		createAndShowGUI();

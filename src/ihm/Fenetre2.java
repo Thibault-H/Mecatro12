@@ -11,7 +11,7 @@ import javax.swing.event.ChangeListener;
 
 import ihm.fenetreImage.VisuImage;
 import ihm.util.MenuSauverOuvrir;
-import objets.ihmEditionObjet.Slide;
+import objets.ihmEditionObjet.vieux.Slide;
 
 public class Fenetre2 extends VisuImage{
   /**
@@ -51,13 +51,15 @@ Programme p;
     slideInt=new Slide();
     slideInt.addChangeListener(new ChangeListener(){
 
-    public void stateChanged(ChangeEvent event){
+    @Override
+	public void stateChanged(ChangeEvent event){
 
       modifBlanc(((JSlider)event.getSource()).getValue(), slideInt.getMaximum());
       
     }});
     slideInt.addWindowListener(new WindowAdapter() {
-      public void windowClosing(WindowEvent w) {
+      @Override
+	public void windowClosing(WindowEvent w) {
         // masque la feêntre externe :
         slideInt.setVisible(false);
         niveauInt.setState(false);
@@ -80,7 +82,8 @@ Programme p;
   
   
 
-  public void itemStateChanged(ItemEvent evt) {
+  @Override
+public void itemStateChanged(ItemEvent evt) {
     if (evt.getSource() == niveauInt) {
       if (evt.getStateChange() == ItemEvent.SELECTED) {
         slideInt.setVisible(true);
@@ -94,14 +97,14 @@ Programme p;
   
   
   public void modifBlanc(double d, double dMax) {
-	  switch (p.mode) {
+/*	  switch (p.mode) {
 		case Raytracing :
 			changerImage(p.r.getParam().getPic(p.r.imageBase, p.r.intBlanc*(1+d/dMax)));;
 			break;
 		case Miroirs:
 			changerImage(p.mec.getParam().getPic(p.r.imageBase, p.r.intBlanc*(1+d/dMax)));;
 			break;
-		}
+		}*/
   }
   
   

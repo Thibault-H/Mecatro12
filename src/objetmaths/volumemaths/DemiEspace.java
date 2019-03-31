@@ -13,6 +13,7 @@ public class DemiEspace implements VolumeMath {
 		this.ptPart=ptPart;
 	}
 	
+	@Override
 	public boolean estDedans(Point3 p) {
 		return normal.scal(ptPart.Vecteur(p))>0;
 	}

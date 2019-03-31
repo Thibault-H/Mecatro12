@@ -1,6 +1,4 @@
 package corps;
-import java.awt.Color;
-import algLin.M3;
 import algLin.Point3;
 import algLin.R3;
 import objets.ObjetRaytracing;
@@ -26,7 +24,7 @@ public class AlgoSimple {
   public CouleurL getCouleurPixel() {
     Photon p= new Photon(pointDepart, r.sc);
     ObjetRaytracing renc = p.avancer(dir);
-    return renc.getColorSimple(p.position, dir);
+    return renc.getColorSimple(p.getPosition(), dir, r.sc);
   }
 
   

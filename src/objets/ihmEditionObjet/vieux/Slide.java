@@ -1,9 +1,10 @@
-package objets.ihmEditionObjet;
+package objets.ihmEditionObjet.vieux;
 
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JSlider;
+import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -73,7 +74,8 @@ public class Slide extends JFrame{
 
     slide.addChangeListener(new ChangeListener(){
 
-      public void stateChanged(ChangeEvent event){
+      @Override
+	public void stateChanged(ChangeEvent event){
 
         label.setText("Valeur actuelle : " + ((JSlider)event.getSource()).getValue());
         //p.modifBlanc(((JSlider)event.getSource()).getValue(),slide.getMaximum());
@@ -87,7 +89,7 @@ public class Slide extends JFrame{
     this.getContentPane().add(label, BorderLayout.SOUTH);      
     
     
-    setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+    setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
 
   }   
 

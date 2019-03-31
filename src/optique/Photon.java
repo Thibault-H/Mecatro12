@@ -1,11 +1,12 @@
 package optique;
 
-import java.awt.Color;
 import java.io.Serializable;
+
 import algLin.Point3;
+import algLin.PointMobile;
 import algLin.R3;
 import objets.ObjetRaytracing;
-import objets.scene.Scene;
+import objets.scene.Stageable;
 import objets.scene.SceneRaytracing;
 
 
@@ -15,8 +16,8 @@ public class Photon implements Serializable{
    * 
    */
   private static final long serialVersionUID = 6334639455076377916L;
-  public Point3 position;
-  SceneRaytracing sc;
+  private PointMobile position;
+  Stageable sc;
   R3 v=R3.zero;
   CouleurL coul;
 
@@ -31,7 +32,7 @@ public class Photon implements Serializable{
   /**
    * @return the sc
    */
-  public SceneRaytracing getSc() {
+  public Stageable getSc() {
     return sc;
   }
   /**
@@ -57,34 +58,22 @@ public class Photon implements Serializable{
   
   //Constructeurs
   
-  public Photon(Point3 p, CouleurL c, SceneRaytracing sce) {
-    position = p;
+  public Photon(Point3 p, CouleurL c, Stageable sce) {
+    position = new PointMobile(p);
     coul = c;
     sc=sce;
   }
   
-  public Photon(Point3 p, SceneRaytracing sce) {
-    position = p;
-    coul = new CouleurL(1,1,1,1);
-    sc=sce;
+  public Photon(Point3 p, Stageable sce) {
+    this(p,new CouleurL(1,1,1,1), sce);
   }
   
   
   //====================================
   
   public ObjetRaytracing avancer(R3 dir) {  //dir est normé
-    double distance= Double.MAX_VALUE;
-    double inter;
-    ObjetRaytracing result=sc.getFond();
-    for (ObjetRaytracing o : sc.getSurfs()) {
-      if ((inter =o.dist(position,dir)) < distance) {
-        distance = inter;
-        result=o;
-      }
-    }
-    position = position.plus(R3.prod(distance, dir));
     v=dir;
-    return result;
+    return sc.avancerJusquauChoc(position, dir);
   }
  
   
@@ -92,11 +81,11 @@ public class Photon implements Serializable{
   public static void main(String[] args) {
     Point3 position= Point3.origine;
     CouleurL lum=CouleurL.noir;
-    SceneRaytracing sc = new SceneRaytracing();
+    Stageable sc = new SceneRaytracing();
     Photon lux0 = new Photon(position,lum,sc);
     Photon lux1 = new Photon(Point3.origine,CouleurL.noir,sc);
     lux1.reset(lux0);
-    lux1.position=Point3.origine.plus(R3.ux);
+    lux1.position=new PointMobile(Point3.origine.plus(R3.ux));
     System.out.println(lux1.position);
   }
  

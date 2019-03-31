@@ -1,6 +1,5 @@
-package objets.ihmEditionObjet;
+package objets.ihmEditionObjet.vieux;
 
-import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.Panel;
@@ -8,15 +7,13 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ComponentEvent;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 import javax.swing.WindowConstants;
 import algLin.R3;
 import ihm.Programme;
+import objets.ihmEditionObjet.ColorChooserDemo;
 
-public class EntreeCoul extends EntreeVect{
+public class EntreeCoulOld extends EntreeVectOld{
 
   /**
    * 
@@ -28,7 +25,7 @@ public class EntreeCoul extends EntreeVect{
   ColorChooserDemo autreFenetre;
   Color ancValCoul;
   
-  public EntreeCoul(boolean b, Programme p) {
+  public EntreeCoulOld(boolean b, Programme p) {
     super(b,p);
     
     
@@ -39,7 +36,8 @@ public class EntreeCoul extends EntreeVect{
 
     //Create and set up the content pane.
     autreFenetre = new ColorChooserDemo( new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
+      @Override
+	public void actionPerformed(ActionEvent e) {
         setCouleur(autreFenetre.tcc.getColor());            
       }       
     });
@@ -59,7 +57,8 @@ public class EntreeCoul extends EntreeVect{
     
     choisirCoul=new JButton("Autre");
     choisirCoul.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent e) {
+      @Override
+	public void actionPerformed(ActionEvent e) {
 
         frame.setVisible(true);
         autreFenetre.tcc.setColor(getCouleur());

@@ -69,12 +69,14 @@ class ImageCanvas extends Canvas {
   
   
   
-  public void paint(Graphics g) {
+  @Override
+public void paint(Graphics g) {
     if (img != null) {
       g.drawImage(img, 0, 0, (int) (coefZoom/100)*(img.getWidth()),(int) (coefZoom/100)*(img.getHeight()), this);  // affichage de l'image
     }
   }
   
+@Override
 public void update(Graphics g) {
     Dimension dimCanvas = getSize();                 // taille actuelle du canvas visible sur l'écran
     if ( imgCachee == null ||                        // l'image cachée n'a pas encore été crée

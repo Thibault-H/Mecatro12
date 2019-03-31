@@ -1,26 +1,41 @@
 package objets.ihmEditionObjet;
 
-import java.awt.TextField;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+
+import javax.swing.JTextField;
 
 import objets.editable.Entrable;
 import objets.editable.Scalaire;
 import objets.editable.TypeEntrable;
 
 public class EntreeScal extends Entree{
-	TextField champ;
+	JTextField champ;
 
 
-
-	public EntreeScal(String name) {
-		this(name, TypeEntrable.Scalaire.valeurDefaut());
-	}
 
 	public EntreeScal(String name, Entrable e) {
-		super(name, e.getTypeEntrable());
-		champ= new TextField();
-
+		this(name);
 		majValeur(e);
-		add(champ);
+	}
+
+	public EntreeScal(String name) {
+		super(name, TypeEntrable.Scalaire);
+		setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
+		
+		champ= new JTextField();
+		champ.setColumns(1);
+		champ.setText("0");
+		
+		c.gridx=1;
+		c.gridy=1;
+		c.ipadx=10;
+		
+		add(champ,c);
+		
+		
 		derniereValeurLue=new Scalaire(0);
 	}
 
@@ -37,8 +52,7 @@ public class EntreeScal extends Entree{
 
 	
 	@Override
-	protected void majValeur(Entrable e) {
-		super.majValeur(e);
+	public void resetAffichage() {
 		champ.setText(""+ ((Scalaire)derniereValeurLue).getValue());
 	}
 
@@ -46,7 +60,16 @@ public class EntreeScal extends Entree{
 	public void setEditable(boolean b) {
 		champ.setEditable(b);
 	}
-
+	
+	@Override
+	public int getNombreCol() {
+		return 3;
+	}
+	
+	@Override
+	public int getNombreLig() {
+		return 3;
+	}
 
 	@Override
 	public void lireEntree() {

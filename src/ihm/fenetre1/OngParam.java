@@ -5,24 +5,86 @@ import java.awt.Checkbox;
 import java.awt.Choice;
 import java.awt.GridLayout;
 import java.awt.Label;
-import java.awt.Panel;
 import java.awt.TextField;
+import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.text.NumberFormat;
+
+import javax.swing.JFormattedTextField;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
 import corps.ParametresRaytracing;
 import ihm.Fenetre1;
 
-public class OngParam extends Panel implements ItemListener{
+
+//TODO : finitions avec l'entrée des dimensions
+
+public class OngParam extends JPanel implements ItemListener, ActionListener{
   public Button ok;
-  public TextField larg;
-public TextField haut;
+  public JTextField larg;
+  public JTextField haut;
   Label lLarg, lHaut, lFormat;
   protected Choice format;
-  public Checkbox largOuHaut;
+  public Checkbox isHauteurEditee;
+  
+  
   
   Fenetre1 fen;
   
+  
+
+  
+  public OngParam(Fenetre1 fen) {
+    super();
+    setLayout(new GridLayout(4,2));
+    
+    //Boutons
+    ok=new Button("Valider");
+    ok.addActionListener(fen);
+    
+    
+    NumberFormat integerFieldFormatter;
+    integerFieldFormatter = NumberFormat.getIntegerInstance();
+    integerFieldFormatter.setMaximumFractionDigits(0);
+    integerFieldFormatter.setGroupingUsed(false);	//1000 ne devient pas "1,000"
+
+    larg = new JFormattedTextField(integerFieldFormatter );
+    larg.setColumns(3);
+    
+    haut = new JFormattedTextField(integerFieldFormatter );
+    haut.setColumns(3);
+    
+    format=new Choice();
+    format.add("jpg");
+    format.add("png");
+    isHauteurEditee=new Checkbox("Editer la hauteur?");
+    isHauteurEditee.addItemListener(this);
+    MAJ(fen.p.r.getParam());
+    
+    
+    //Etiquettes
+    lLarg= new Label("Largeur");
+    lHaut= new Label("Hauteur");
+    lFormat=new Label("Format");
+    
+    //Finitions
+    add(lLarg);
+    add(larg);
+    add(lHaut);
+    add(haut);
+    add(lFormat);
+    add(format);
+    add(isHauteurEditee);
+    add(ok);
+    
+    haut.setEditable(false);
+  }
+  
+  //======================================
+  //Lecture
   
   /**Renvoie l'entier reprÃ©sentant la hauteur de l'image finale
    * 
@@ -47,41 +109,6 @@ public TextField haut;
   public String getFormat() {
     return format.getSelectedItem();
   }
-  
-  public OngParam(Fenetre1 fen) {
-    super();
-    setLayout(new GridLayout(4,2));
-    
-    //Boutons
-    ok=new Button("Valider");
-    ok.addActionListener(fen);
-    larg = new TextField();
-    haut= new TextField();
-    haut.setEditable(false);
-    format=new Choice();
-    format.add("jpg");
-    format.add("png");
-    largOuHaut=new Checkbox("Editer la hauteur?");
-    largOuHaut.addItemListener(this);
-    MAJ(fen.p.r.getParam());
-    
-    
-    //Etiquettes
-    lLarg= new Label("Largeur");
-    lHaut= new Label("Hauteur");
-    lFormat=new Label("Format");
-    
-    //Finitions
-    add(lLarg);
-    add(larg);
-    add(lHaut);
-    add(haut);
-    add(lFormat);
-    add(format);
-    add(largOuHaut);
-    add(ok);
-    
-  }
 
   public void MAJ(ParametresRaytracing p) {
     larg.setText(String.valueOf(p.getLargpx()));
@@ -89,9 +116,13 @@ public TextField haut;
     format.select(1);
   }
 
+  
+//===============================================================
+// Action
 
-  public void itemStateChanged(ItemEvent e) {
-    if (e.getSource()==largOuHaut) {
+  @Override
+public void itemStateChanged(ItemEvent e) {
+    if (e.getSource()==isHauteurEditee) {
       boolean b= e.getStateChange()==ItemEvent.SELECTED;
       haut.setEditable(b);
       larg.setEditable(!b);
@@ -99,4 +130,9 @@ public TextField haut;
     }
     
   }
+
+@Override
+public void actionPerformed(ActionEvent e) {
+	}
+
 }

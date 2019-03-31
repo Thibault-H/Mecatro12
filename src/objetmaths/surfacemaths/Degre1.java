@@ -3,6 +3,7 @@ package objetmaths.surfacemaths;
 import java.io.Serializable;
 import algLin.Point3;
 import algLin.R3;
+import corps.Parametres;
 import corps.ParametresRaytracing;
 
 public class Degre1 implements SurfMath, Serializable{
@@ -33,14 +34,15 @@ public class Degre1 implements SurfMath, Serializable{
   }
   
   
-  public double dist(Point3 m, R3 d) {
+  @Override
+public double dist(Point3 m, R3 d) {
     d=d.normer();
     double a = d.scal(normal);
-    if (Math.abs(a)<ParametresRaytracing.h)
+    if (Math.abs(a)<Parametres.h)
       return Double.POSITIVE_INFINITY;
     else {
       double result= (m.Vecteur(ptPart).scal(normal)/a);
-      if (result <ParametresRaytracing.h)
+      if (result <Parametres.h)
         return Double.POSITIVE_INFINITY;
       else
         return result;
@@ -50,12 +52,14 @@ public class Degre1 implements SurfMath, Serializable{
 
 
   
-  public R3 getNorm(Point3 m) {
+  @Override
+public R3 getNorm(Point3 m) {
     return normal;
   }
   
   
-  public String toString() {
+  @Override
+public String toString() {
     return String.format("Degré 1 : { Normal = %s ; Point particulier = %s }", getNorm(Point3.origine),getPoint() );
   }
 

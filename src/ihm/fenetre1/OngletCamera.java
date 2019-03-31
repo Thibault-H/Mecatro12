@@ -1,10 +1,7 @@
 package ihm.fenetre1;
 
-import java.awt.Button;
-import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Label;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
@@ -14,12 +11,10 @@ import javax.swing.JFrame;
 import algLin.Point3;
 import corps.ParametresRaytracing;
 import ihm.Fenetre1;
-import objets.ihmEditionObjet.ChoixPointRef;
-import objets.ihmEditionObjet.EntreeCoul;
-import objets.ihmEditionObjet.EntreePoint;
-import objets.ihmEditionObjet.EntreeVect;
 import objets.ihmEditionObjet.Sure;
-import objets.objetPhong.Plan;
+import objets.ihmEditionObjet.vieux.ChoixPointRef;
+import objets.ihmEditionObjet.vieux.EntreePointOld;
+import objets.ihmEditionObjet.vieux.EntreeVectOld;
 
 public class OngletCamera extends Panel implements ActionListener{
   /**
@@ -49,7 +44,8 @@ public class OngletCamera extends Panel implements ActionListener{
         Sure box = new Sure();
         box.donnerReaction(new ActionListener() {
 
-          public void actionPerformed(ActionEvent e) {
+          @Override
+		public void actionPerformed(ActionEvent e) {
             if (e.getSource() == box.ok) {
               f.p.r.setParam(new ParametresRaytracing());
               f.afficherImage();
@@ -64,12 +60,12 @@ public class OngletCamera extends Panel implements ActionListener{
     });
     
     //Entrée données
-    EntreeVect eDirection= new EntreeVect(false,fen.p);
+    EntreeVectOld eDirection= new EntreeVectOld(false,fen.p);
     eDirection.setValue(f.p.r.getParam().getDirection());
     eDirection.setJoystick(true);
     
     
-    EntreePoint ePoint= new EntreePoint(false,fen.p);
+    EntreePointOld ePoint= new EntreePointOld(false,fen.p);
     ePoint.setAct(refCamera);
     ePoint.setRef(Point3.origine);
     

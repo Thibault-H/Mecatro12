@@ -1,14 +1,7 @@
 package ihm.fenetreImage;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.Frame;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Image;
-import java.awt.Rectangle;
-import java.awt.ScrollPane;
 import java.awt.event.ComponentEvent;
 import java.awt.event.ComponentListener;
 import java.awt.image.BufferedImage;
@@ -83,7 +76,8 @@ class ImageFrame extends Frame implements ComponentListener{
   }
   
 
-  public void componentResized(ComponentEvent arg0) {
+  @Override
+public void componentResized(ComponentEvent arg0) {
    /* can.setZoom( 100 * Math.min( ((double) getWidth()) / ((double)img.getWidth()), ((double) getHeight())/((double)img.getHeight())));
     repaint();*/
 

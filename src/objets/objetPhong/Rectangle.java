@@ -1,15 +1,10 @@
 package objets.objetPhong;
 
 import java.awt.Color;
-import java.util.Map;
-
-import algLin.M3;
 import algLin.Point3;
 import algLin.R3;
-import objetmaths.surfacemaths.Quadrique;
 import objetmaths.surfacemaths.RectangleMath;
 import objets.editable.Couleur;
-import objets.editable.Entrable;
 import objets.editable.Point;
 import objets.editable.Scalaire;
 import objets.editable.Vecteur;
@@ -43,6 +38,7 @@ public class Rectangle extends Surface{
 		attributs.put("Centre", new Point(centre));
 		attributs.put("Largeur",new Scalaire(largeur));
 		attributs.put("Longueur",new Scalaire(longueur));
+		attributs.put("Couleur", new Couleur(listeCouleurs[0]));
 	}
 
 	@Override
@@ -71,6 +67,7 @@ public class Rectangle extends Surface{
 	}
 
 
+	@Override
 	public String toString() {
 		return String.format("Rectangle : { Normal = %s ; Centre = %s ; Dimension = %s x %s", surf.getNorm(Point3.origine),((RectangleMath) surf).getPoint(), ((RectangleMath) surf).getLongueur1(), ((RectangleMath) surf).getLongueur2() );
 	}

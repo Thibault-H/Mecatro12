@@ -1,10 +1,10 @@
-package objets.scene;
+package objets.scene.vieux;
 
 import java.io.Serializable;
 
 import objets.objetPhong.Horizon;
 
-public abstract class Scene implements Serializable{
+public abstract class Scene£££ implements Serializable{
   
 
   private static final long serialVersionUID = 1302058706739955574L;
@@ -13,7 +13,7 @@ public abstract class Scene implements Serializable{
   protected double intensiteBlanc;
   
   
-  public Scene() {
+  public Scene£££() {
   }
   
   public double getBlanc() {

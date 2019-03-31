@@ -2,8 +2,6 @@ package objets.editable;
 
 import java.awt.Color;
 
-import algLin.Point3;
-import algLin.R3;
 import optique.CouleurL;
 import optique.CouleurS;
 
@@ -30,7 +28,7 @@ public class Couleur implements Entrable {
 	
 
 	public CouleurL getValueL() {
-		if (((Double)i).isNaN())
+		if (!((Double)i).isNaN())
 			return new CouleurL(color,i);
 		else throw new IllegalArgumentException("Impossible de créer une couleur lumineuse avec une intensite NaN!");
 	}
@@ -54,6 +52,14 @@ public class Couleur implements Entrable {
 				else if (input[0] instanceof Couleur) {
 					color = ((Couleur) input[0]).color;
 					i = ((Couleur) input[0]).i;
+				}
+				else if (input[0] instanceof CouleurS) {
+					color = ((CouleurS) input[0]).getColor();
+					i=Double.NaN;
+				}
+				else if (input[0] instanceof Color) {
+					color = ((Color) input[0]);
+					i=Double.NaN;
 				}
 				else return false;
 				return true;

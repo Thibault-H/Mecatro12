@@ -2,7 +2,6 @@ package objetmaths.volumemaths;
 
 import algLin.Point3;
 import algLin.R3;
-import corps.Parametres;
 import objetmaths.surfacemaths.PolygoneConvexe;
 import objetmaths.surfacemaths.RectangleMath;
 
@@ -62,6 +61,7 @@ public class VolumePyramide implements VolumeMath {
 	
 	
 	
+	@Override
 	public boolean estDedans(Point3 p) {
 		boolean result =true;
 		if (faces.length>1) {

@@ -1,4 +1,4 @@
-package objets.editable;
+/*package objets.ihmEditionObjet.vieux;
 
 import java.awt.Button;
 import java.awt.Frame;
@@ -18,11 +18,7 @@ import algLin.R3;
 import ihm.Fenetre1;
 import objetmaths.surfacemaths.CubeMath;
 import objets.ObjetRaytracing;
-import objets.ihmEditionObjet.EntreeAngle;
-import objets.ihmEditionObjet.EntreeCoul;
-import objets.ihmEditionObjet.EntreePoint;
 import objets.ihmEditionObjet.EntreeScal;
-import objets.ihmEditionObjet.EntreeVect;
 import objets.objetPhong.CubepasFini;
 import objets.objetPhong.Plan;
 import objets.objetPhong.Sphere;
@@ -36,7 +32,7 @@ public class ModifierObjet extends Frame{
   public Fenetre1 fen;
   ObjetRaytracing retour;
   
-  List<EntreeVect> listeEntree;
+  List<EntreeVectOld> listeEntree;
   
   
   public ModifierObjet(Fenetre1 f, ObjetDansScene o) {
@@ -56,16 +52,16 @@ public class ModifierObjet extends Frame{
     if (o instanceof SourcePonctuelleIsotrope) {
       //Elements
           
-      EntreeScal eIntens= new EntreeScal();
+      EntreeScal eIntens= new EntreeScal("");
       eIntens.setValue(((SourcePonctuelleIsotrope) o).getCouleurL().getIntensite());
       
       
-      EntreePoint ePoint= new EntreePoint(false,fen.p);
+      EntreePointOld ePoint= new EntreePointOld(false,fen.p);
       ePoint.setAct(((SourcePonctuelleIsotrope) o).getPoint());
       ePoint.setRef(Point3.origine);
       
       
-      EntreeCoul eCoul = new EntreeCoul(false,fen.p);
+      EntreeCoulOld eCoul = new EntreeCoulOld(false,fen.p);
       eCoul.setCouleur(((SourcePonctuelleIsotrope) o).getCouleurL().getColor());
       
       
@@ -104,17 +100,17 @@ public class ModifierObjet extends Frame{
     else if (o instanceof Plan) { 
       //Elements
       
-      EntreeVect eNormal= new EntreeVect(false,fen.p);
+      EntreeVectOld eNormal= new EntreeVectOld(false,fen.p);
       eNormal.setValue(((Plan) o).getNorm(Point3.origine));
       eNormal.setJoystick(true);
       
       
-      EntreePoint ePoint= new EntreePoint(false,fen.p);
+      EntreePointOld ePoint= new EntreePointOld(false,fen.p);
       ePoint.setAct(((Plan)o).getPoint());
       ePoint.setRef(Point3.origine);
       
       
-      EntreeCoul eCoul = new EntreeCoul(false,fen.p);
+      EntreeCoulOld eCoul = new EntreeCoulOld(false,fen.p);
       eCoul.setCouleur(((Plan)o).getCouleurIntra(Point3.origine).getColor());
       
       
@@ -153,16 +149,16 @@ public class ModifierObjet extends Frame{
     else if (o instanceof Sphere) {
       //Elements
           
-      EntreeScal eRayon= new EntreeScal();
+      EntreeScal eRayon= new EntreeScal("");
       eRayon.setValue(((Sphere) o).getRayon());
       
       
-      EntreePoint ePoint= new EntreePoint(false,fen.p);
+      EntreePointOld ePoint= new EntreePointOld(false,fen.p);
       ePoint.setAct(((Sphere)o).getCentre());
       ePoint.setRef(Point3.origine);
       
       
-      EntreeCoul eCoul = new EntreeCoul(false,fen.p);
+      EntreeCoulOld eCoul = new EntreeCoulOld(false,fen.p);
       eCoul.setCouleur(((Sphere)o).getCouleurIntra(Point3.origine).getColor());
       
       
@@ -205,15 +201,15 @@ public class ModifierObjet extends Frame{
       eCote.setValue(((CubepasFini) o).getSurf().getCote());
       
       
-      EntreePoint ePoint= new EntreePoint(false,fen.p);
+      EntreePointOld ePoint= new EntreePointOld(false,fen.p);
       ePoint.setAct(((CubepasFini)o).getSurf().getCentre());
       ePoint.setRef(Point3.origine);
       
-      EntreeAngle eAngle= new EntreeAngle(false,fen.p, (CubepasFini) o);       //C'est la donnée des 3 composantes de rotation
+      EntreeAngleOld eAngle= new EntreeAngleOld(false,fen.p, (CubepasFini) o);       //C'est la donnée des 3 composantes de rotation
       eAngle.setValue(R3.zero);
       eAngle.setJoystick(true);
       
-      EntreeCoul eCoul = new EntreeCoul(false,fen.p);
+      EntreeCoulOld eCoul = new EntreeCoulOld(false,fen.p);
       eCoul.setCouleur(((CubepasFini)o).getCouleurIntra(Point3.origine).getColor());
       
       
@@ -224,7 +220,7 @@ public class ModifierObjet extends Frame{
       Label lCoul=new Label("Couleur (RGB)");
       
       //Disposition
-      /*setLayout(new GridLayout(4,3));
+      setLayout(new GridLayout(4,3));
       add(lCote);
       add(lPoint);
       add(lAngle);
@@ -235,7 +231,7 @@ public class ModifierObjet extends Frame{
       add(new Panel());
       add(new Panel());
       add(eCoul);
-      add(valider);*/
+      add(valider);
       setLayout(new GridBagLayout());
       GridBagConstraints c = new GridBagConstraints();
       
@@ -327,3 +323,4 @@ public class ModifierObjet extends Frame{
   
   
   }
+*/

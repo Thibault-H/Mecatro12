@@ -1,13 +1,10 @@
 package objets.objetPhong;
 
 import java.awt.Color;
-import java.util.Map;
-
 import algLin.Point3;
 import algLin.R3;
 import objetmaths.surfacemaths.Degre1;
 import objets.editable.Couleur;
-import objets.editable.Entrable;
 import objets.editable.Vecteur;
 import objets.editable.Point;
 import optique.CouleurS;
@@ -60,6 +57,7 @@ public class Plan extends Surface{
 	}
 
 
+	@Override
 	public String toString() {
 		return String.format("Plan : { Normal = %s ; Point particulier = %s", surf.getNorm(Point3.origine),((Degre1) surf).getPoint() );
 	}

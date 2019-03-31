@@ -4,7 +4,6 @@ import java.awt.Color;
 
 import algLin.Point3;
 import algLin.R3;
-import objetmaths.surfacemaths.SurfMath;
 import objetmaths.volumemaths.VolumeMath;
 import optique.*;
 
@@ -23,6 +22,7 @@ public abstract class MiroirPhong extends Surface {
 	
 	public abstract VolumeMath domaineIllumine(SourcePonctuelleIsotrope s);
 	
+	@Override
 	public CouleurL getColor(Point3 m, R3 d) {
 	      //CouleurL lumTot = sc.getAmbiant().getCouleurL();
 		  CouleurL lumTot = CouleurL.noir;

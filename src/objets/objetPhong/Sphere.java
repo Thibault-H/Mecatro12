@@ -1,18 +1,14 @@
 package objets.objetPhong;
 
 import java.awt.Color;
-import java.util.Map;
-
 import algLin.M3;
 import algLin.Point3;
 import algLin.R3;
 import objetmaths.surfacemaths.Quadrique;
 import objets.TourneAutour;
 import objets.editable.Couleur;
-import objets.editable.Entrable;
 import objets.editable.Point;
 import objets.editable.Scalaire;
-import objets.editable.Vecteur;
 import optique.CouleurS;
 
 public class Sphere extends Surface implements TourneAutour{
@@ -103,6 +99,7 @@ public class Sphere extends Surface implements TourneAutour{
 	
 	//Autres
 	
+	@Override
 	public String toString() {
 		return String.format("Sphere : { Centre = %s ; Rayon = %3f }", centre, rayon);
 	}

@@ -7,12 +7,10 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 
-import algLin.R3;
-import objets.scene.Scene;
+import objets.scene.Stageable;
 import optique.CouleurL;
-import optique.Source;
 
-public abstract class GenerateurImage {
+public abstract class GenerateurImage<S extends Stageable> {
 	// =============================================
 		// Attributs
 		// =============================================
@@ -28,7 +26,7 @@ public abstract class GenerateurImage {
 
 		
 
-		public abstract Scene getScene() ;
+		public abstract Stageable getScene() ;
 		
 		// =================================================
 		// Fonctions auxilliaires du programme
@@ -58,12 +56,12 @@ public abstract class GenerateurImage {
 			Graphics2D g2 = off_Image.createGraphics();
 			for (int i = 0; i < getParam().getLargpx(); i++) {
 				for (int j = 0; j < getParam().getHautpx(); j++) {
-					g2.setColor(premImage[i][j]
-							.appliquerIntGlobale(iBlanc));/*
+					g2.setColor(premImage[i][j].appliquerIntGlobale(iBlanc));/*
 															 * if (premImage[i][j].appliquerIntGlobale(iBlanc).getBlue() <25
 															 * && premImage[i][j].appliquerIntGlobale(iBlanc).getRed() <25)
 															 * System.out.print("");
 															 */
+					//System.out.println(iBlanc +" | "+premImage[i][j]+ " | " +  premImage[i][j].appliquerIntGlobale(iBlanc));
 					g2.fillRect(i, j, 1, 1);
 				}
 			}
@@ -78,12 +76,12 @@ public abstract class GenerateurImage {
 		 * 
 		 * @return
 		 */
-		public BufferedImage mainProgram() {
+		public BufferedImage mainProgram(double iblanc) {
 			long startTime = System.nanoTime();
 
 			CouleurL[][] premImage = getTab();
 
-			BufferedImage off_Image = getPic(premImage, intBlanc);
+			BufferedImage off_Image = getPic(premImage, iblanc);
 			try {
 				File outputfile = new File("saved.png");
 				ImageIO.write(off_Image, "png", outputfile);
@@ -91,6 +89,10 @@ public abstract class GenerateurImage {
 			}
 			System.out.println((System.nanoTime() - startTime) / 1000000 + "ms de lecture");
 			return off_Image;
+		}
+		
+		public BufferedImage mainProgram() {
+			return mainProgram(200000);
 		}
 
 		

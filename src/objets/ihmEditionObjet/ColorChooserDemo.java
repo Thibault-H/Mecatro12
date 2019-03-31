@@ -35,7 +35,6 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
-import javax.swing.colorchooser.*;
 
 /* ColorChooserDemo.java requires no other files. */
 public class ColorChooserDemo extends JPanel
@@ -50,7 +49,7 @@ public class ColorChooserDemo extends JPanel
 
         //Set up the banner at the top of the window
         banner = new JLabel("New Color",
-                            JLabel.CENTER);
+                            SwingConstants.CENTER);
         banner.setForeground(Color.yellow);
         banner.setBackground(Color.gray);
         banner.setOpaque(true);
@@ -79,7 +78,8 @@ public class ColorChooserDemo extends JPanel
         add(p,BorderLayout.SOUTH);
     }
 
-    public void stateChanged(ChangeEvent e) {
+    @Override
+	public void stateChanged(ChangeEvent e) {
         Color newColor = tcc.getColor();
         banner.setForeground(newColor);
     }
@@ -108,7 +108,8 @@ public class ColorChooserDemo extends JPanel
         //Schedule a job for the event-dispatching thread:
         //creating and showing this application's GUI.
         javax.swing.SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
+            @Override
+			public void run() {
                 createAndShowGUI(new ActionListener() {
 
                   @Override

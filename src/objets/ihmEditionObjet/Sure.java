@@ -9,7 +9,6 @@ import java.awt.Panel;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
 
 public class Sure extends Frame{
   public Button ok;
@@ -22,7 +21,7 @@ public class Sure extends Frame{
 
     ok= new Button("Ouais");
     annuler = new Button("En fait, non");
-    text= new Label("ÃŠtes-vous sÃ»r?");
+    text= new Label("En êtes-vous sûr?");
     
     add(text,BorderLayout.CENTER);
     Panel p=new Panel(new GridLayout(1,2));
@@ -31,7 +30,8 @@ public class Sure extends Frame{
     add(p,BorderLayout.SOUTH);
 
     addWindowListener(new WindowAdapter() {
-      public void windowClosing(WindowEvent w) {
+      @Override
+	public void windowClosing(WindowEvent w) {
         setVisible(false);
       }
         

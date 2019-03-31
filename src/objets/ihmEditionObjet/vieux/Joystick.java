@@ -1,13 +1,9 @@
-package objets.ihmEditionObjet;
+package objets.ihmEditionObjet.vieux;
 
-import java.awt.BorderLayout;
 import java.awt.Button;
-import java.awt.Canvas;
-import java.awt.ComponentOrientation;
 import java.awt.Frame;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.GridLayout;
 import java.awt.Label;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;

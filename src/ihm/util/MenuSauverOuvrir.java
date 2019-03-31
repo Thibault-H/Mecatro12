@@ -12,13 +12,11 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import javax.imageio.ImageIO;
 import corps.ParametresRaytracing;
 import corps.Raytracing;
 import ihm.Fenetre1;
 import ihm.Fenetre2;
 import ihm.Programme;
-import ihm.fenetreImage.VisuImage;
 import objets.scene.SceneRaytracing;
 
 public class MenuSauverOuvrir implements ActionListener{
@@ -79,7 +77,8 @@ public class MenuSauverOuvrir implements ActionListener{
   
   
   
-  public void actionPerformed(ActionEvent evt) {
+  @Override
+public void actionPerformed(ActionEvent evt) {
     if (evt.getSource()== sauverScene || evt.getSource()== sauverPack || evt.getSource()== sauverFullPack) {
       try {
         FileDialog fd = new FileDialog(frameParent);

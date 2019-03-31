@@ -1,97 +1,88 @@
 package objets.ihmEditionObjet;
 
-import java.awt.BorderLayout;
-import java.awt.Button;
-import java.awt.FlowLayout;
-import java.awt.Frame;
-import java.awt.GridLayout;
-import java.awt.Label;
-import java.awt.Panel;
-import java.awt.event.ActionEvent;
-import java.awt.event.ComponentEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
+
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
+
 import algLin.Point3;
 import algLin.R3;
-import ihm.Programme;
+import objets.editable.Entrable;
+import objets.editable.Point;
+import objets.editable.TypeEntrable;
+import objets.editable.Vecteur;
 
-public class EntreePoint extends EntreeVect{
+public class EntreePoint extends Entree {
 
-  /**
-   * 
-   */
-  private static final long serialVersionUID = 6353095686415771963L;
-  protected Point3 act;
-  Point3 ref;
-  protected DoubleJoystick dJoy;
-  JButton modifierRef;
-  
-  public EntreePoint(boolean b, Programme p) {
-    super(b, p);
-    ref=act=Point3.origine;
-    Panel pan=new Panel();
-    dJoy= new DoubleJoystick(this);
+	Point3 reference = Point3.origine;
+	private EntreeVect entreeValeur;
+	JButton advanced;
+	
+	public EntreePoint(String nom) {
+		super(nom, TypeEntrable.Point);
+		GridBagConstraints c = new GridBagConstraints();
+		c.fill = GridBagConstraints.HORIZONTAL;
+		
+		entreeValeur = new EntreeVect("",false);
+		entreeValeur.setBorder(BorderFactory.createEmptyBorder(0,0,0,0));	//Pn supprime les bordures habituelles
+		
+		c.gridheight=3;
+		c.gridx=0;
+		c.gridy=0;
+		add(entreeValeur,c);
+		
+		
+		advanced = new JButton("Plus...");
+		
+		c.gridheight = 1;
+		c.gridx=1;
+		c.gridy=0;
+		c.anchor = GridBagConstraints.FIRST_LINE_END;
+		c.insets = new Insets(10,0,0,0);
+		add(advanced,c);
+		
+	}
 
-    modifierRef=new JButton(ref.toString());
-    modifierRef.addActionListener(this);
-    
+	public EntreePoint(String nom, Entrable valeurInit, boolean orientation) {
+		this(nom);
+		majValeur(valeurInit); 
+	}
+	
+	
+	@Override
+	protected void majValeur(Object e) {
+		derniereValeurLue.conformerA(e);
+		entreeValeur.majValeur( reference.Vecteur( ((Point)derniereValeurLue).getValue()) );
+		resetAffichage();
+	}
+	
+	
+	@Override
+	public void resetAffichage() {
+		entreeValeur.resetAffichage();
+	}
+	
+	@Override
+	public int getNombreCol() {
+		return entreeValeur.getNombreCol()+1;
+	}
 
-    pan.setLayout(new GridLayout(2,1));
-    pan.add(modifierRef);
-    pan.add(dJoy);    
-    add(pan);
-    
-  }
-  
-  
-  public Point3 getAct() {
-    return act;
-  }
-  public void setAct(Point3 p) {
-    act=p;
-    setValue(ref.Vecteur(p));
-  }
-  
-  
-  
-  public void setRef(Point3 p) {
-    setValue(p.Vecteur(ref).plus(getValue()));
-    ref=p;
-    modifierRef.setText(ref.toString());
-  }
-  
-  public Point3 getRef() {
-    return ref;
-  }
-  
-  
-  public void actionPerformed(ActionEvent e) {
-    if (e.getSource()==modifierRef) {
-      Frame f=new Frame("Editer le point de référence");
-      f.add(new ChoixPointRef(b,p,this,getRef()));
-      f.addWindowListener(new WindowAdapter() {
-        public void windowClosing(WindowEvent w) {
-          f.setVisible(false);          
-        }
-      });
-      f.setSize(500,300);
-      f.setVisible(true);
-    }
-    if (e.getSource() instanceof ChoixPointRef) {
-      setRef(((ChoixPointRef) e.getSource()).getAct());
-    }
-    else if (e.getSource() instanceof Button) {
-      int action= dJoy.AFaire((Button) e.getSource());
-      setAct(act.transformation(action, p.incrtrans, p.incrrot, p.r.getParam().getBase(), ref));
-      new ComponentEvent(this,ComponentEvent.COMPONENT_FIRST);
-    
-  }
-  }
-  
-  
-  
+	@Override
+	public int getNombreLig() {
+		return entreeValeur.getNombreLig()+1;
+	}
+
+	@Override
+	public void lireEntree() {
+		R3 r = ((Vecteur)entreeValeur.getValeurLue()).getValue();
+		derniereValeurLue.conformerA(reference.plus(r));
+	}
+
+	@Override
+	public void setEditable(boolean RorW) {
+		// TODO Auto-generated method stub
+		entreeValeur.setEditable(RorW);
+	}
+
 }
-
-
-

@@ -3,8 +3,6 @@ package algLin;
 import java.io.Serializable;
 
 import corps.Parametres;
-import objets.editable.Entrable;
-import objets.editable.TypeEntrable;
 import objets.objetPhong.Sphere;
 
 /**Cette classe implÃ©mente les points d'un espace affine de dimension 3.
@@ -12,13 +10,13 @@ import objets.objetPhong.Sphere;
  * @author Adel
  *
  */
-public class Point3 implements Serializable{
+public class Point3 implements Serializable, TesteurNullite{
 
   /**
    * 
    */
   private static final long serialVersionUID = 4348267632078983249L;
-  private R3 pos;
+  protected R3 pos;
   public static final Point3 origine = new Point3(R3.zero);
   
   
@@ -28,10 +26,13 @@ public class Point3 implements Serializable{
     pos=r;
   }
   
+  public Point3(Point3 p) {
+	pos = new R3(p.pos);
+}
   
   //Deplacement
-  
-  /**Operateur de translation
+ 
+/**Operateur de translation
    * 
    * @param r
    * @return
@@ -106,8 +107,19 @@ public class Point3 implements Serializable{
     return b.pos.moins(pos);
   }
   
+  /**Renvoie true ssi la distance de p à a est inférieur que celle de p à b.
+   * En cas de doute (odg de epsilon), renvoie true.
+   * @param a
+   * @param b
+   * @return
+   */
+  public boolean estPlusProcheDeQue(Point3 a, Point3 b) {
+	  return estPlusPetit( Vecteur(a).norme2car(), Vecteur(b).norme2car()); 
+  }
   
-  public String toString() {
+  
+  @Override
+public String toString() {
     return pos.toString();
   }
   

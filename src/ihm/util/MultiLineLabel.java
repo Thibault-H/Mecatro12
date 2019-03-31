@@ -171,7 +171,8 @@ public class MultiLineLabel extends JPanel
         fontAttributes = oldAttributes;
     }
 
-    public void setForeground(Color col)
+    @Override
+	public void setForeground(Color col)
     {
         this.col = col;    
         Component[] components = this.getComponents();

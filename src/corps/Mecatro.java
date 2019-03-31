@@ -9,7 +9,7 @@ import javax.imageio.ImageIO;
 
 import algLin.R3;
 import objets.Objet;
-import objets.ObjetMecatro;
+import objets.MiroirMecatro;
 import objets.scene.SceneMecatro;
 import optique.CouleurL;
 import optique.Source;
@@ -48,6 +48,7 @@ public class Mecatro extends GenerateurImage{
 	    imageBase=null;
 	  }
 
+	@Override
 	public ParametresMecatro getParam() {
 		return param;
 	}
@@ -56,6 +57,7 @@ public class Mecatro extends GenerateurImage{
 		param = par;
 	}
 
+	@Override
 	public SceneMecatro getScene() {
 		return sc;
 	}
@@ -64,12 +66,12 @@ public class Mecatro extends GenerateurImage{
 
 	public void ajouter(Objet m, Raytracing r) {
 		sc.ajouter(m);
-		if (m instanceof ObjetMecatro)
-			r.ajouter( ((ObjetMecatro)m).getSurfacePhong());
+		if (m instanceof MiroirMecatro)
+			r.ajouter( ((MiroirMecatro)m).getSurfacePhong());
 	}
 	
 	public void toRayt(Raytracing r) {
-		for (ObjetMecatro o : sc.listesurfs)
+		for (MiroirMecatro o : sc.listesurfs)
 			r.ajouter(o.getSurfacePhong());
 	}
 	
@@ -80,6 +82,7 @@ public class Mecatro extends GenerateurImage{
 	 * 
 	 * @return
 	 */
+	@Override
 	public CouleurL[][] getTab() {
 		CouleurL[][] result = new CouleurL[param.getLargpx()][param.getHautpx()];
 		AlgoMecatro alg;
@@ -88,7 +91,7 @@ public class Mecatro extends GenerateurImage{
 		int h = param.getHautpx();
 		for (int i = 0; i < l; i++) {
 			if (i % 10 == 0)
-				System.out.printf("%d%% %n", (int) 100 * i / l);
+				System.out.printf("%d%% %n", 100 * i / l);
 			for (int j = 0; j < h; j++) {
 				alg = new AlgoMecatro(this, i, j);
 				result[i][j] = lum = alg.getCouleurPixel();

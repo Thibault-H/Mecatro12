@@ -14,6 +14,7 @@ public class EspaceEntierIllumine extends VolumeIllumine{
 		return 1;
 	}
 	
+	@Override
 	public double getIntensiteRecue(Point3 p) {
 		return 1; 
 	}

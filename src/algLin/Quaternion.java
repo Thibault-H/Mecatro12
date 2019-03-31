@@ -135,6 +135,7 @@ public class Quaternion implements TesteurNullite{
 	
 	
 	
+	@Override
 	public String toString() {
 		String p0,p1,p2,p3,result;
 		p0=p1=p2=p3= "";

@@ -3,10 +3,6 @@ package optique;
 import java.awt.Color;
 import java.io.Serializable;
 
-import objets.editable.Entrable;
-import objets.editable.TypeEntrable;
-import objets.scene.SceneRaytracing;
-
 public class CouleurL implements Serializable{
 	/**
 	 * 
@@ -87,9 +83,9 @@ public class CouleurL implements Serializable{
 
 	public Color appliquerIntGlobale(double val) {
 		try {
-			return new Color((float) (r*i/(val*maxCoul)), (float) (g*i/(val*maxCoul)), (float) (b*i/(val*maxCoul)));
+			return new Color( (int)(255*(r/maxCoul) * (i/val)), (int)(255*(g/maxCoul) * (i/val)), (int)(255*(b/maxCoul) * (i/val)));
 		} catch (IllegalArgumentException e) {
-			return new Color( cut(r*i/(val*maxCoul)) , cut(g*i/(val*maxCoul)) , cut(b*i/(val*maxCoul)) );
+			return new Color( (int)(255* cut((r/maxCoul) * (i/val) )), (int)(255* cut((g/maxCoul) * (i/val) )), (int)(255* cut((b/maxCoul) * (i/val) )));
 		}
 	}
 
@@ -99,8 +95,6 @@ public class CouleurL implements Serializable{
 	//Melange de CouleurL
 
 	public CouleurL plus(CouleurL lux) {
-		if (i+ lux.i>5)
-			System.out.print("");
 		return new CouleurL(i*r + lux.i*lux.r , i*g + lux.i*lux.g , i*b + lux.b*lux.i, i + lux.i);
 	}
 	
@@ -122,17 +116,19 @@ public class CouleurL implements Serializable{
 	//Autres
 	
 
+	@Override
 	public String toString() {
 		return String.format("( Intensite: %.3g  |  Couleur: (%.3g ; %.3g ; %.3g) )",i,r,g,b);
 	}
 
 
-	public static void main(String[] aargs) {
+	public static void main(String[] args) {
 		CouleurL l1 = new CouleurL(1,0,0,4);
-		CouleurL l2 = new CouleurL(1,1,0,2);
+		CouleurL l2 = new CouleurL(0.333,0.333,0.333,0.06);
 		CouleurL l3 = l1.plus(l2);
-		Color c= new Color((float)21,(float)1,(float)(0.5));
-		System.out.print(l3);
+		Color c= new Color(1,1,(float)(0.5));
+		System.out.println(l2.appliquerIntGlobale(200000));
+		
 
 	}
 

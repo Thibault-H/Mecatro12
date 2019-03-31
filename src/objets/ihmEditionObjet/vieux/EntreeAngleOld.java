@@ -1,19 +1,17 @@
-package objets.ihmEditionObjet;
+package objets.ihmEditionObjet.vieux;
 
 import java.awt.Button;
 import java.awt.GridLayout;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ComponentEvent;
-import java.awt.event.ItemEvent;
 import javax.swing.JButton;
-import algLin.M3;
 import algLin.Point3;
 import algLin.R3;
 import ihm.Programme;
 import objets.AFaireTourner;
 
-public class EntreeAngle extends EntreeVect{
+public class EntreeAngleOld extends EntreeVectOld{
 
   /**
    * 
@@ -23,7 +21,7 @@ public class EntreeAngle extends EntreeVect{
   AFaireTourner obj;
   
   
-  public EntreeAngle(boolean b, Programme p, AFaireTourner o) {
+  public EntreeAngleOld(boolean b, Programme p, AFaireTourner o) {
     super(b, p);
     obj=o;
     JButton choixRef = new JButton("Ref");
@@ -37,12 +35,14 @@ public class EntreeAngle extends EntreeVect{
     setEditable(false);
   }
   
-  public R3 getValue() {
+  @Override
+public R3 getValue() {
     return super.getValue().prod(Math.PI);
   }
   
   
-  public void actionPerformed(ActionEvent e) {
+  @Override
+public void actionPerformed(ActionEvent e) {
     if (e.getSource() instanceof Button) {
       int action= joy.AFaire((Button) e.getSource());
       obj.faireTournerAvecJoystick(action,  p.incrrot, p.r.getParam().getBase(), Point3.origine);

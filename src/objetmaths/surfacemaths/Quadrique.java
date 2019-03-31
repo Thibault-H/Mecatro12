@@ -4,6 +4,7 @@ import java.io.Serializable;
 import algLin.M3;
 import algLin.Point3;
 import algLin.R3;
+import corps.Parametres;
 import corps.ParametresRaytracing;
 
 
@@ -77,12 +78,13 @@ public class Quadrique implements SurfMath, Serializable{
   
   
   
-  public double dist(Point3 m, R3 d) {
+  @Override
+public double dist(Point3 m, R3 d) {
     R3 om = Point3.origine.Vecteur(m);
     double a= phi.gram(d, d);
     double bsur2 = d.scal(l.plus(phi.fois(om)));
     double c = phi.gram(om, om) + 2*l.scal(om) + j;
-    if (Math.abs(a)<ParametresRaytracing.h)
+    if (Math.abs(a)<Parametres.h)
       return Double.POSITIVE_INFINITY;
     else {
       double deltasur4=bsur2*bsur2 - a*c;
@@ -96,7 +98,8 @@ public class Quadrique implements SurfMath, Serializable{
   }
 
   
-  public R3 getNorm(Point3 m) {
+  @Override
+public R3 getNorm(Point3 m) {
     try {
     return (l.plus(phi.fois(Point3.origine.Vecteur(m)))).normer();
     }

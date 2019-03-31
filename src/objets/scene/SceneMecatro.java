@@ -1,70 +1,97 @@
 package objets.scene;
 
 import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 
 import algLin.Point3;
 import algLin.R3;
-import objets.Objet;
-import objets.ObjetMecatro;
-import objets.objetPhong.Horizon;
-import objets.objetPhong.MiroirPhong;
-import optique.Ambiant;
+import objets.MiroirMecatro;
 import optique.CouleurL;
+import optique.Photon;
 import optique.Source;
 import optique.SourcePonctuelleIsotrope;
 
-public class SceneMecatro extends Scene {
+/** La sceneMecatro est une scène de base dans laquelle il n'y a qu'une unique source, placée en l'origine et de couleur donnée.
+ * La scène contient une catégorie particulière d'objets : les miroirMecatros 
+ * @author Adel
+ *
+ */
+public class SceneMecatro extends SceneSansSources {
 	
-	public ObjetMecatro[] listesurfs;
-	protected CouleurL lumSource = new CouleurL(Color.RED, 10);
-	public Point3 source = Point3.origine.plus(R3.uy);
+	public List<MiroirMecatro> listeMiroirs;
+	protected CouleurL lumSource;
+	private Point3 source;
+	
+	
+	public SceneMecatro(CouleurL lumiere) {
+		super();
+		listeMiroirs=new ArrayList<MiroirMecatro>();
+		
+		source = Point3.origine.plus(R3.uy);
+		lumSource=lumiere;
+		}
+	
 	
 	public SceneMecatro() {
-		super();
-		listesurfs=new ObjetMecatro[0];
+		this(new CouleurL(Color.WHITE, 10));
 		}
 	
-	public SceneMecatro(CouleurL source) {
-		super();
-		lumSource=source;
-		}
 	
-	public SourcePonctuelleIsotrope getSource() {
-		return new SourcePonctuelleIsotrope(source, lumSource);
-	}
-	
-	public void ajouter(Objet o) {
-	    if (o instanceof ObjetMecatro) {
-	        ObjetMecatro[] result = new ObjetMecatro[listesurfs.length+1];
-	        result[listesurfs.length]=(ObjetMecatro) o;
-	        System.arraycopy(listesurfs,0,result,0,listesurfs.length);
-	        listesurfs=result;
-	        ((ObjetMecatro) o).setScene(this);
-	      }
-	      else
-	        throw new IllegalArgumentException("Type d'objet non reconnu. Veuillez rentrer un miroir.");
-	    }
-	
-	public void supprimer(Objet o) {    
-	    if (o instanceof ObjetMecatro) {
-	      ObjetMecatro[] result = new ObjetMecatro[listesurfs.length-1];
-	      int k=0;
-	      for (int i=0; i< listesurfs.length-1 ; i++) {
-	        if (listesurfs[i] == o)
-	          k=1;
-	        result[i]= listesurfs[i+k];
-	      }
-	      listesurfs=result;
-	      ((ObjetMecatro) o).setScene(this);
-	    }
-	    else
-	      throw new IllegalArgumentException("Type d'objet non reconnu. Veuillez rentrer un miroir.");
-	  
-	  }
+	//=============================================
+	//Getters
 
 	@Override
-	public Horizon getFond() {
-		// TODO Auto-generated method stub
-		return null;
+	public Source[] getSources() {
+		return new Source[] {new SourcePonctuelleIsotrope(source, lumSource)};
+	}
+	
+	
+	
+	//===========================================
+	// Modification de la scene
+	
+	@Override
+	public void ajouter(Objet o) {
+		try {
+			super.ajouter(o);
+		}
+		catch(TypeObjetPasTraiteException e) {
+			throw new IllegalArgumentException("Erreur dans l'ajout de l'objet : type non reconnu.");
+		}
+		
+		if (o instanceof MiroirMecatro)
+			listeMiroirs.add((MiroirMecatro)o);
+	}
+		
+	
+	
+	@Override
+	public void supprimer(Objet o) {
+		try {
+			super.supprimer(o);
+		}
+		catch(TypeObjetPasTraiteException e) {
+			throw new IllegalArgumentException("Erreur dans l'ajout de l'objet : type non reconnu.");
+		}
+		
+		if (o instanceof MiroirMecatro)
+			listeMiroirs.remove((MiroirMecatro)o);
+
+	}
+	
+	//===============================================
+	//Algorithme
+	
+	/**Renvoie la somme des contributions de chaque miroir par rapport à la source
+	 * (Remarque : l'influence directe de la source est eclipsée)
+	 * 
+	 */
+	@Override
+	public List<Photon> getLumieresEn(Point3 p) {
+		List<Photon> result = new ArrayList<Photon>();
+		for (MiroirMecatro m : listeMiroirs)
+			result.add(m.getIntensiteRecue(this));
+		return result;
 	}
 }

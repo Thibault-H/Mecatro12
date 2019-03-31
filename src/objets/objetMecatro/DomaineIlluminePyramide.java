@@ -5,7 +5,6 @@ import algLin.R3;
 import objetmaths.surfacemaths.RectangleMath;
 import objetmaths.volumemaths.EspaceEntier;
 import objetmaths.volumemaths.VolumePyramide;
-import optique.Source;
 import optique.SourcePonctuelleIsotrope;
 
 public class DomaineIlluminePyramide extends VolumeIllumine{
@@ -41,6 +40,7 @@ public class DomaineIlluminePyramide extends VolumeIllumine{
 		sourceVirtuelle = new SourcePonctuelleIsotrope(s.symetrie(cadre.getPoint(), cadre.getNorm(Point3.origine)), 1);
 		v = new VolumePyramide(sourceVirtuelle.getPoint(),cadre);
 	}
+	@Override
 	protected double fonctionIllumination(Point3 p) {
 		return sourceVirtuelle.getInfluenceBasique(p);
 	}

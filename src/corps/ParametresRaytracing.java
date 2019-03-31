@@ -1,6 +1,5 @@
 package corps;
 
-import java.io.Serializable;
 import algLin.M3;
 import algLin.Point3;
 import algLin.R3;

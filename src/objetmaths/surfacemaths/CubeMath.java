@@ -1,11 +1,11 @@
 package objetmaths.surfacemaths;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 import algLin.M3;
 import algLin.Point3;
 import algLin.R3;
+import corps.Parametres;
 import corps.ParametresRaytracing;
 
 public class CubeMath implements SurfMath, Serializable{
@@ -159,7 +159,7 @@ public class CubeMath implements SurfMath, Serializable{
   public boolean estSurFace(int i, Point3 m) {
     R3 vectOM = base.transpose().fois(centre.Vecteur(m)); //L'expression de OM dans la base adaptee
     double orientationParRapportNormale= vectOM.getVal(i/2 +1); //On récupère la normale de la face, orientée comme on veut
-    boolean validerOrient = ( orientationParRapportNormale >=-ParametresRaytracing.h && i%2==0) || ( orientationParRapportNormale <= ParametresRaytracing.h && i%2==1);
+    boolean validerOrient = ( orientationParRapportNormale >=-Parametres.h && i%2==0) || ( orientationParRapportNormale <= Parametres.h && i%2==1);
     if (!validerOrient) return false;
     else {
       if (i/2==0)      return (Math.abs(vectOM.get3())<=cote/2 && Math.abs(vectOM.get2())<=cote/2);

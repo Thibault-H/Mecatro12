@@ -2,32 +2,31 @@ package ihm;
 
 import java.awt.BorderLayout;
 import java.awt.Button;
-import java.awt.Checkbox;
 import java.awt.Color;
 import java.awt.Frame;
-import java.awt.GridLayout;
 import java.awt.Menu;
 import java.awt.MenuBar;
 import java.awt.MenuItem;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JTabbedPane;
+
 import algLin.Point3;
 import corps.ParametresRaytracing;
-import corps.Raytracing;
 import ihm.fenetre1.OngParam;
 import ihm.fenetre1.OngletCamera;
 import ihm.fenetre1.OngletObjet;
 import ihm.fenetreImage.ImageScrollPane;
 import ihm.util.EcouteurPourFermetureFenetre;
 import ihm.util.MenuSauverOuvrir;
-import objets.editable.ModifierObjet;
-import objets.ihmEditionObjet.DoubleJoystick;
-import objets.ihmEditionObjet.Sure;
+import objets.ihmEditionObjet.FenetreEntree;
+import objets.ihmEditionObjet.vieux.DoubleJoystick;
 import objets.objetPhong.CubepasFini;
 import objets.objetPhong.Plan;
 import objets.objetPhong.Sphere;
+import objets.scene.Objet;
 
 public class Fenetre1 extends Frame implements ActionListener{
 
@@ -135,33 +134,16 @@ public class Fenetre1 extends Frame implements ActionListener{
     setVisible(true);
     
   }
+  
+  public Objet trouverSurfaceSelectionnee() {
+	  
+  }
 
-  public void actionPerformed(ActionEvent e) {
-    if (e.getSource() == joyPrinc){
-      int action= joyPrinc.AFaire((Button) e.getSource());
-      System.out.print(action);
-      p.r.getParam().setOeil(p.r.getParam().getOeil().transformation(action, p.incrtrans, p.incrrot, p.r.getParam().getBase(), p.r.getParam().getOeil()));
-      p.r.getParam().setDirection(p.r.getParam().getDirection().transformation(action, p.incrrot, p.r.getParam().getBase(), p.r.getParam().getOeil()));
-      afficherImage();
-      repaint();
-    }
-    else if (e.getSource() == onglet1.ok) {
-      try {
-        if (onglet1.largOuHaut.getState()==true) {//On Ã©dite la hauteur
-          p.r.getParam().aggrandirHJusque(onglet1.getHaut());
-          onglet1.larg.setText(String.valueOf(p.r.getParam().getLargpx()));        
-        }
-        else {//On Ã©dite la largeur
-          p.r.getParam().aggrandirLJusque(onglet1.getLarg());
-          onglet1.haut.setText(String.valueOf(p.r.getParam().getHautpx()));
-        }
-        
-        p.formatImage=onglet1.getFormat();
-        
-      } catch (NumberFormatException ex) {
-        System.out.println("EntrÃ©e non reconnue. Veuillez entrer une longueur en nombre entier de pixels");
-      }
-    }
+  @Override
+public void actionPerformed(ActionEvent e) {
+    if (e.getSource() == onglet1.ok) 
+    	p.agir(TypeAction.LireOnglet1, onglet1.isHauteurEditee.getState());
+    
     else if (e.getSource() == onglet3.ajouter) {
       ParametresRaytracing par = p.r.getParam();
       Point3 pointDevant= par.getOeil().plus(par.getDirection().prod(5+par.getEcart()));
@@ -171,36 +153,39 @@ public class Fenetre1 extends Frame implements ActionListener{
         p.r.ajouter(pl);
         onglet3.AjouterSurf(pl);
         afficherImage();
-        new ModifierObjet(this, p.r.getScene().getSurfs()[p.r.getScene().getSurfs().length - 1]);     
+        new ModifierObjet(this, p.r.getScene().getListeObjets()[p.r.getScene().getListeObjets().length - 1]);     
         break;
       case "Sphere":
         Sphere sp = new Sphere("Sphere 1",pointDevant, 2, Color.black);
         p.r.ajouter(sp);
         onglet3.AjouterSurf(sp);
         afficherImage();
-        new ModifierObjet(this, p.r.getScene().getSurfs()[p.r.getScene().getSurfs().length - 1]);     
+        new ModifierObjet(this, p.r.getScene().getListeObjets()[p.r.getScene().getListeObjets().length - 1]);     
         break;
       case "Cube":
         CubepasFini cu = new CubepasFini("Cube 1 ",pointDevant, 2, Color.black);
         p.r.ajouter(cu);
         onglet3.AjouterSurf(cu);
         afficherImage();
-        new ModifierObjet(this, p.r.getScene().getSurfs()[p.r.getScene().getSurfs().length - 1]);     
+        new ModifierObjet(this, p.r.getScene().getListeObjets()[p.r.getScene().getListeObjets().length - 1]);     
         break;
       }
     }
-    else if (e.getSource() == onglet3.modifierObj) {
-      new ModifierObjet(this, p.r.getScene().getSurfs()[onglet3.listeObjets.getSelectedIndex()]);
-    }
-    else if (e.getSource() == onglet3.modifierSou) {
-      new ModifierObjet(this, p.r.getScene().getSources()[onglet3.listeSources.getSelectedIndex()]);
-    }
+    else if (e.getSource() == onglet3.modifierObj ) 
+    	p.agir(TypeAction.ModifierObjet, 
+    			p.agir(TypeAction.TrouverSurface, onglet3.listeObjets.getSelectedIndex())); //renvoie l'indice de l'objet sélectionné
+   
+    else if (e.getSource() == onglet3.modifierSou) 
+    	p.agir(TypeAction.AjouterSource, onglet3.listeSources.getSelectedIndex()); //renvoie l'indice de la source sélectionné
+    
     else if (e.getSource() == onglet3.supprimerObj) {
-      p.r.supprimer(p.r.getScene().getSurfs()[onglet3.listeObjets.getSelectedIndex()]);
+    	p.agir(TypeAction.SupprimerObjet, onglet3.listeObjets.getSelectedIndex()); //renvoie l'indice de l'objet sélectionné
+      p.r.supprimer(p.r.getScene().getListeObjets()[onglet3.listeObjets.getSelectedIndex()]);
       onglet3.SupprimerSurf(onglet3.listeObjets.getSelectedIndex());
       afficherImage();
     }
     else if (e.getSource() == onglet3.supprimerSou) {
+    	p.agir(TypeAction.SupprimerSource, onglet3.listeObjets.getSelectedIndex()); //renvoie l'indice de l'objet sélectionné
       p.r.supprimer(p.r.getScene().getSources()[onglet3.listeSources.getSelectedIndex()]);
       onglet3.SupprimerSource(onglet3.listeSources.getSelectedIndex());
       afficherImage();

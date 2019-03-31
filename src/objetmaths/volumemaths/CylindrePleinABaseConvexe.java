@@ -19,6 +19,7 @@ public class CylindrePleinABaseConvexe implements VolumeMath{
 	}
 	
 	
+	@Override
 	public boolean estDedans(Point3 p) {
 		double dist1 = base.dist(p, directrice.opp());
 		double dist2 = base.dist(p, directrice);

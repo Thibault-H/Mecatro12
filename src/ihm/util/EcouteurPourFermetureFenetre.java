@@ -8,7 +8,8 @@ public class EcouteurPourFermetureFenetre extends WindowAdapter {
   //            l'interface WindowListener sans avoir à redéfinir TOUTES 
   //            les méthodes de l'interface.
     
-  public void windowClosing(WindowEvent w) {
+  @Override
+public void windowClosing(WindowEvent w) {
     w.getWindow().dispose() ;  // Libération des ressources associées à la Frame
     System.exit(0);  // Sortie du programme  avec code d'erreur 0 (pas d'erreur)
   }

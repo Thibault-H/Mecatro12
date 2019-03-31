@@ -352,7 +352,8 @@ public class M3 implements Serializable{
 	  return det()>=Parametres.h;
   }
   //================================
-  public String toString() {
+  @Override
+public String toString() {
     String result ="";
     for (int i=1;i<4;i++) {
       result+= "| ";
@@ -367,7 +368,8 @@ public class M3 implements Serializable{
   /**Egalité au sens de la norme 2
    * 
    */
-  public boolean equals(Object o) {
+  @Override
+public boolean equals(Object o) {
     if (o instanceof M3)
       return moins((M3)o).norme2() <= Parametres.h;
     else return false;

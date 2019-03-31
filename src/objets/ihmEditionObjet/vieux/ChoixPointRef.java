@@ -1,22 +1,19 @@
-package objets.ihmEditionObjet;
+package objets.ihmEditionObjet.vieux;
 
-import java.awt.BorderLayout;
 import java.awt.Button;
-import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.List;
 import java.awt.Panel;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import algLin.Point3;
 import ihm.Programme;
 import objets.ObjetRaytracing;
 import objets.TourneAutour;
 import optique.Source;
 
-public class ChoixPointRef extends EntreePoint implements ItemListener{
+public class ChoixPointRef extends EntreePointOld implements ItemListener{
 
   /**
    * 
@@ -24,14 +21,14 @@ public class ChoixPointRef extends EntreePoint implements ItemListener{
   private static final long serialVersionUID = 8504758772496438658L;
 
   
-  EntreePoint fenetreMere;
+  EntreePointOld fenetreMere;
   public List listePoints;
   java.util.List<Point3> listePointsV;
   public Button valider;
   
   boolean estPourCamera;
   
-  public ChoixPointRef(boolean b, Programme p, EntreePoint e) {
+  public ChoixPointRef(boolean b, Programme p, EntreePointOld e) {
     super(b,p);
     estPourCamera=false;
     act=p.r.getParam().getOeil();
@@ -51,7 +48,7 @@ public class ChoixPointRef extends EntreePoint implements ItemListener{
     listePoints.add("Origine");
     listePointsV.add(Point3.origine);
     
-    for (ObjetRaytracing o: p.r.getScene().getSurfs()) {
+    for (ObjetRaytracing o: p.r.getScene().getListeObjets()) {
       if (o instanceof TourneAutour) {
         listePoints.add(o.getName());
         listePointsV.add(((TourneAutour) o).getPointRef());
@@ -81,7 +78,7 @@ public class ChoixPointRef extends EntreePoint implements ItemListener{
   
   
   
-  public ChoixPointRef(boolean b, Programme p, EntreePoint e, Point3 act) {
+  public ChoixPointRef(boolean b, Programme p, EntreePointOld e, Point3 act) {
     this(b,p,e);
     this.act=act;
   }

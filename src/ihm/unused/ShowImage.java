@@ -3,14 +3,12 @@ package ihm.unused;
 import java.awt.Frame;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Panel;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
 
 public class ShowImage extends Frame {
   public BufferedImage  image;
@@ -46,7 +44,8 @@ InputStreamReader(System.in));
   
   
   
-  public void paint(Graphics g) {
+  @Override
+public void paint(Graphics g) {
   grossissement=Math.min(this.getHeight()/image.getHeight() , getWidth()/image.getWidth());
   g.drawImage( grossir(image,grossissement), 0, 0, null);
   }

@@ -6,12 +6,6 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JSlider;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 
 
 
@@ -68,7 +62,8 @@ public class VisuImage extends Frame implements ActionListener, ItemListener {
     // fenêtre séparée :
     fenetreExterne = new ImageFrame();
     fenetreExterne.addWindowListener(new WindowAdapter() {
-      public void windowClosing(WindowEvent w) {
+      @Override
+	public void windowClosing(WindowEvent w) {
         // masque la feêntre externe :
         fenetreExterne.setVisible(false);
         typeVisu.setState(false);
@@ -83,7 +78,8 @@ public class VisuImage extends Frame implements ActionListener, ItemListener {
     Button zoomOK= new Button("OK");
     zoomOK.addActionListener(new ActionListener() {
 
-      public void actionPerformed(ActionEvent e) {
+      @Override
+	public void actionPerformed(ActionEvent e) {
         coefZoom=(Double.valueOf(text.getText()));
         afficherImage();
         
@@ -91,7 +87,8 @@ public class VisuImage extends Frame implements ActionListener, ItemListener {
       
     });
     fenetreZoom.addWindowListener(new WindowAdapter() {
-      public void windowClosing(WindowEvent w) {
+      @Override
+	public void windowClosing(WindowEvent w) {
         // masque la feêntre externe :
         fenetreZoom.setVisible(false);
         
@@ -122,7 +119,8 @@ public class VisuImage extends Frame implements ActionListener, ItemListener {
     menuFichier.add(quitter);
     quitter.addActionListener(
       new ActionListener() {
-        public void actionPerformed(ActionEvent evt) {
+        @Override
+		public void actionPerformed(ActionEvent evt) {
           System.exit(0);
         }
       } 
@@ -150,7 +148,8 @@ public class VisuImage extends Frame implements ActionListener, ItemListener {
 	    afficherImage();
 	    // écoute des evts de type "fenetre" via une classe dédiée (pour quitter en cas de fermeture) :
 	    addWindowListener(new WindowAdapter() {
-	      public void windowClosing(WindowEvent w) {
+	      @Override
+		public void windowClosing(WindowEvent w) {
 	        // masque la feêntre externe :
 	        setVisible(false);
 	        
@@ -181,7 +180,8 @@ public class VisuImage extends Frame implements ActionListener, ItemListener {
   
   
   
-  public void actionPerformed(ActionEvent evt) {
+  @Override
+public void actionPerformed(ActionEvent evt) {
     if (evt.getSource() == sauverImage || evt.getSource() == boutonSauverImage) {
       sauverImage();
     }
@@ -191,7 +191,8 @@ public class VisuImage extends Frame implements ActionListener, ItemListener {
   }
   
   
-  public void itemStateChanged(ItemEvent evt) {
+  @Override
+public void itemStateChanged(ItemEvent evt) {
     if (evt.getSource() == typeVisu) {
       if (evt.getStateChange() == ItemEvent.SELECTED) {
         zoneImage.affecterImage(null);

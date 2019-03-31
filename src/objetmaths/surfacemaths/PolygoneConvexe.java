@@ -24,6 +24,7 @@ public abstract class PolygoneConvexe extends SurfacePlaneConvexe {
 	
 	protected abstract void setBaseRef(M3 ref) ;
 
+	@Override
 	protected boolean estDedans(Point3 m) {
 		return testDeterminant(m, getListePoints(), getNorm(null));
 	}
@@ -58,6 +59,7 @@ public abstract class PolygoneConvexe extends SurfacePlaneConvexe {
 	
 	//Méthode de similitude
 	
+	@Override
 	public void faireTourner(double val, R3 axe) {
 		M3 rot = M3.rotation(axe, val);
 		setBaseRef(getBaseRef().fois(rot));
@@ -67,6 +69,7 @@ public abstract class PolygoneConvexe extends SurfacePlaneConvexe {
 	}
 
 
+	@Override
 	public void faireTourner(R3 val, M3 base) {
 		faireTourner(val.get1(),base.getC1());
 		faireTourner(val.get2(),base.getC2());

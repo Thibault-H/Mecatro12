@@ -1,7 +1,6 @@
 package objets.editable;
 
 import algLin.Point3;
-import algLin.R3;
 
 public class Point implements Entrable {
 

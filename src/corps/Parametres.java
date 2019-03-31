@@ -3,9 +3,6 @@ package corps;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
-import algLin.M3;
-import algLin.Point3;
-import algLin.R3;
 import optique.CouleurL;
 
 /*Classe contenant les parametres de l'image à générer et ceux de la scène
