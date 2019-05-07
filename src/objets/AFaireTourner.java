@@ -1,8 +1,8 @@
 package objets;
 
-import algLin.M3;
-import algLin.Point3;
-import algLin.R3;
+import auxMaths.algLin.M3;
+import auxMaths.algLin.Point3;
+import auxMaths.algLin.R3;
 
 public interface AFaireTourner {
   

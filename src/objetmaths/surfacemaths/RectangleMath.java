@@ -1,6 +1,9 @@
 package objetmaths.surfacemaths;
 
-import algLin.*;
+import auxMaths.algLin.M3;
+import auxMaths.algLin.O3;
+import auxMaths.algLin.Point3;
+import auxMaths.algLin.R3;
 import objets.AFaireTourner;
 
 public class RectangleMath extends PolygoneConvexe implements AFaireTourner{
@@ -15,7 +18,7 @@ public class RectangleMath extends PolygoneConvexe implements AFaireTourner{
 	 */
 	public RectangleMath(R3 n, Point3 centre, double longueur, double largeur) {
 		planBase = new Degre1(n, centre);
-		baseDeRef = n.base();
+		baseDeRef = O3.base(n);
 		this.centre=centre;
 		l1=longueur;
 		l2=largeur;

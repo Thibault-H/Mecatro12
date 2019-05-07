@@ -1,8 +1,8 @@
 package objetmaths.surfacemaths;
 
-import algLin.M3;
-import algLin.Point3;
-import algLin.R3;
+import auxMaths.algLin.M3;
+import auxMaths.algLin.Point3;
+import auxMaths.algLin.R3;
 import objets.AFaireTourner;
 
 public abstract class SurfacePlaneConvexe implements SurfMath, AFaireTourner{

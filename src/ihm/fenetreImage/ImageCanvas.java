@@ -100,6 +100,8 @@ public void update(Graphics g) {
     System.out.println(can.getWidth());
     
   }
+
+
   
 
   

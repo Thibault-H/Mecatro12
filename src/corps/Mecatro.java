@@ -1,108 +1,86 @@
 package corps;
 
-import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
-
-import algLin.R3;
-import objets.Objet;
-import objets.MiroirMecatro;
+import corps.tableauCouleurs.TableauCouleurs;
+import corps.tableauCouleurs.algos.AlgoMecatro;
+import corps.tableauCouleurs.algos.AlgoRaytracing;
+import corps.tableauCouleurs.algos.AlgoSimple;
+import corps.tableauCouleurs.parametres.ParametresMecatro;
+import corps.tableauCouleurs.parametres.ParametresRaytracing;
 import objets.scene.SceneMecatro;
-import optique.CouleurL;
-import optique.Source;
 
-public class Mecatro extends GenerateurImage{
+public class Mecatro extends GenerateurImageScene{
 
-	// =============================================
-	// Attributs
-	// =============================================
+	//=============================================
+	//Attributs
+	//=============================================
 
-	// Propri√©t√©s fondamentales et n√©cessaires
+
 
 	protected ParametresMecatro param;
 	protected SceneMecatro sc;
 
-	// =====================================
-	// Constructeur: d√©finit les attributs par d√©faut
-	public Mecatro(double largeur) {
-	    sc=new SceneMecatro();
-	    param=new ParametresMecatro(largeur);
-	    intBlanc=0;
-	    imageBase=null;
-	  }
 
-/*	public Mecatro(SceneMecatro s) {
-	    sc=s;
-	    param=new ParametresMecatro(s.);
-	    intBlanc=0;
-	    imageBase=null;
-	  }
-*/
+
+	//=====================================
+	//Constructeur: dÈfinit les attributs par dÈfaut
+	
+	public Mecatro() {
+		sc=new SceneMecatro();
+		param=new ParametresMecatro();
+	}
+
+	public Mecatro(SceneMecatro s) {
+		sc=s;
+		param=new ParametresMecatro();
+	}
+
 	public Mecatro(SceneMecatro s, ParametresMecatro p) {
-	    sc=s;
-	    param=p;
-	    intBlanc=0;
-	    imageBase=null;
-	  }
-
-	@Override
-	public ParametresMecatro getParam() {
-		return param;
+		sc=s;
+		param=p;
 	}
 
-	public void setParam(ParametresMecatro par) {
-		param = par;
-	}
-
+	
+	//===============================================
+	//Getters
+	
 	@Override
 	public SceneMecatro getScene() {
 		return sc;
 	}
 
-	// =================================================
-
-	public void ajouter(Objet m, Raytracing r) {
-		sc.ajouter(m);
-		if (m instanceof MiroirMecatro)
-			r.ajouter( ((MiroirMecatro)m).getSurfacePhong());
-	}
-	
-	public void toRayt(Raytracing r) {
-		for (MiroirMecatro o : sc.listesurfs)
-			r.ajouter(o.getSurfacePhong());
-	}
-	
-	
-	
-	/**
-	 * Renvoie le tableau de couleur qui correspond √† l'image rendue
-	 * 
-	 * @return
-	 */
 	@Override
-	public CouleurL[][] getTab() {
-		CouleurL[][] result = new CouleurL[param.getLargpx()][param.getHautpx()];
-		AlgoMecatro alg;
-		CouleurL lum;
-		int l = param.getLargpx();
-		int h = param.getHautpx();
-		for (int i = 0; i < l; i++) {
-			if (i % 10 == 0)
-				System.out.printf("%d%% %n", 100 * i / l);
-			for (int j = 0; j < h; j++) {
-				alg = new AlgoMecatro(this, i, j);
-				result[i][j] = lum = alg.getCouleurPixel();
-				if (intBlanc < lum.getIntensite())
-					intBlanc = lum.getIntensite();
-			}
+	public ParametresMecatro getParam() {
+		return param;
+	}
+	
+	//==================================================
+	@Override
+	public TableauCouleurs getTab(TypeImage t) {
+		switch(t) {
+		case Raytracing: return new TableauCouleurs(new AlgoRaytracing(param.toRay(),sc));
+		case Previsualisation: return new TableauCouleurs(new AlgoSimple(param.toRay(),sc));
+		case Mecatro : return new TableauCouleurs(new AlgoMecatro(param,sc));
+		default : throw new RuntimeException(t+" pas pris en compte par ce gÈnÈrateur d'image!");
 		}
-		imageBase = result;
-		return result;
+	}
+	
+
+	//=========================================================
+	//Methodes de programmable
+
+	@Override
+	public BufferedImage imageFinale() {
+		return mainProgram(TypeImage.Mecatro);
 	}
 
-	
+	@Override
+	protected ParametresRaytracing getParamPrevisu() {
+		return param.toRay();
+	}
+
+
+
 
 }

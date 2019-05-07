@@ -1,7 +1,7 @@
 package objetmaths.volumemaths;
 
-import algLin.Point3;
-import algLin.R3;
+import auxMaths.algLin.Point3;
+import auxMaths.algLin.R3;
 import objetmaths.surfacemaths.SurfacePlaneConvexe;
 
 public class CylindrePleinABaseConvexe implements VolumeMath{

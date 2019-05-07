@@ -1,13 +1,15 @@
 package objets.objetPhong;
 
 import java.awt.Color;
-import algLin.Point3;
-import algLin.R3;
+
+import auxMaths.algLin.Point3;
+import auxMaths.algLin.R3;
+import auxMaths.algLin.VectUnitaire;
+import objets.CategorieObjet;
 import objets.ObjetRaytracing;
-import objets.TypeObjet;
 import objets.scene.Stageable;
 import optique.Ambiant;
-import optique.CouleurL;
+import optique.lumiere.CouleurL;
 
 public class Horizon extends ObjetRaytracing {
 
@@ -26,8 +28,8 @@ public class Horizon extends ObjetRaytracing {
 	}
 
 	@Override
-	public TypeObjet getTypeObjet() {
-		return TypeObjet.Horizon;
+	public CategorieObjet getTypeObjet() {
+		return CategorieObjet.Horizon;
 	}
 
 
@@ -37,7 +39,7 @@ public class Horizon extends ObjetRaytracing {
 	}
 
 	@Override
-	public CouleurL getColor(Point3 p, R3 d, Stageable s) {
+	public CouleurL getColor(Point3 p, VectUnitaire d, Stageable s) {
 		return new CouleurL(c.getRed(),c.getGreen(),c.getBlue(),i);
 	}
 

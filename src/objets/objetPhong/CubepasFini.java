@@ -2,13 +2,13 @@ package objets.objetPhong;
 
 import java.awt.Color;
 
-import algLin.M3;
-import algLin.Point3;
-import algLin.R3;
+import auxMaths.algLin.M3;
+import auxMaths.algLin.Point3;
+import auxMaths.algLin.R3;
 import objetmaths.surfacemaths.CubeMath2;
 import objets.AFaireTourner;
 import objets.TourneAutour;
-import optique.CouleurS;
+import optique.lumiere.CouleurS;
 
 public class CubepasFini extends Surface implements TourneAutour, AFaireTourner{
 

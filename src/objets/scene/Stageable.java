@@ -1,17 +1,18 @@
 package objets.scene;
 
-import java.util.List;
-
-import algLin.Point3;
-import algLin.PointMobile;
-import algLin.R3;
+import auxMaths.PointMobile;
+import auxMaths.algLin.Point3;
+import auxMaths.algLin.R3;
+import auxMaths.algLin.VectUnitaire;
+import ihm.fenetre1.ongletsEdition.ongletScene.FenetreAjoutObjet;
+import ihm.fenetre1.ongletsEdition.ongletScene.IHMListe;
+import ihm.fenetre1.ongletsEdition.ongletScene.TypeObjetEntrable;
 import objets.ObjetRaytracing;
-import objets.ihmEditionObjet.IHMListe;
 import objets.objetPhong.Horizon;
 import objets.objetPhong.Surface;
 import optique.Ambiant;
-import optique.Photon;
 import optique.Source;
+import optique.lumiere.AssociationLumieres;
 
 public interface Stageable {
 
@@ -71,8 +72,31 @@ public interface Stageable {
 	void supprimer(Objet o) throws TypeObjetPasTraiteException;
 
 	
+	/**Renvoie la JList correspondant à la liste des surfaces.
+	 * 
+	 * @return
+	 */
 	IHMListe<Surface> getIHMSurfaces();
+	
+	/**Renvoie la JList correspondant à la liste des sources.
+	 * 	
+	 * @return
+	 */
 	IHMListe<Source> getIHMSources();
+	
+	/**Renvoie la liste du type des objets que l'on peut ajouter dans la scène
+	 * 
+	 * @return
+	 */
+	TypeObjetEntrable[] getObjetsAjoutables();
+	
+	/**Renvoie une JFrame d'édition de la scene.
+	 * 
+	 * @return
+	 */
+	public default FenetreAjoutObjet getIHMListeAjout() {
+		return new FenetreAjoutObjet(this);
+	}
 	
 	//===============================================
 	// Rendu et algos
@@ -80,11 +104,11 @@ public interface Stageable {
 	public double getBlanc();
 	
 	/**Renvoie l'ensemble des lumières incidentes en un point donné : intensité, couleur, direction, sens
-	 * TODO : prise en compte des obstacles qui cachent la lumière
+	 * TODO : remplacer AssociationLumieres par Lumiere (cf fonction mesurerSpec de LumiereDirective.
 	 * @param p
 	 * @return
 	 */
-	List<Photon> getLumieresEn(Point3 p);
+	 AssociationLumieres getLumieresEn(Point3 p);
 
 	
 	/**Avance m en suivant dir jusqu'à tomber sur un objet. Renvoie ce dernier.
@@ -93,7 +117,19 @@ public interface Stageable {
 	 * @param dir
 	 * @return
 	 */
-	ObjetRaytracing avancerJusquauChoc(PointMobile m, R3 dir);
+	ObjetRaytracing avancerJusquauChoc(PointMobile m, VectUnitaire dir, ObjetRaytracing... aIgnorer);
+
+	/**Avance m en suivant dir jusqu'à tomber sur un objet. Renvoie ce dernier.
+	 * 
+	 * @param m
+	 * @param dir
+	 * @return
+	 */
+	default ObjetRaytracing avancerJusquauChoc(PointMobile m, R3 dir, ObjetRaytracing... aIgnorer) {
+		if (dir.estNul())
+			return null;		//TODO
+		return avancerJusquauChoc(m,dir.normer(),aIgnorer);
+	}
 
 }
 

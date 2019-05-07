@@ -2,17 +2,21 @@ package objets.scene;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import algLin.PointMobile;
-import algLin.R3;
+import auxMaths.PointMobile;
+import auxMaths.algLin.Point3;
+import auxMaths.algLin.R3;
+import auxMaths.algLin.VectUnitaire;
+import ihm.fenetre1.ongletsEdition.ongletScene.IHMListe;
 import objets.ObjetRaytracing;
-import objets.ihmEditionObjet.IHMListe;
 import objets.objetPhong.Horizon;
+import objets.objetPhong.Plan;
 import objets.objetPhong.Surface;
 import optique.Ambiant;
-import optique.CouleurL;
 import optique.Source;
+import optique.lumiere.CouleurL;
 
 /**La scène de base, qui gère les objets classiques de raytracing qui ne sont pas des sources.
  * Une classe fille de SceneSansSources doit implémenter getSources et getLumiereEn
@@ -101,9 +105,9 @@ public abstract class SceneSansSources implements Stageable {
 	public void supprimer(Objet o) throws TypeObjetPasTraiteException{
 		switch(o.getTypeObjet()) {
 			case Surface:
-				listeSurfaces.remove((Surface)o);
+				listeSurfaces.remove(o);
 			case Horizon:	//case surface OU case horizon
-				listeObjets.remove((ObjetRaytracing)o);
+				listeObjets.remove(o);
 				break;
 	
 			
@@ -124,11 +128,15 @@ public abstract class SceneSansSources implements Stageable {
 	
 	
 	@Override
-	public ObjetRaytracing avancerJusquauChoc(PointMobile m, R3 dir) {
+	public ObjetRaytracing avancerJusquauChoc(PointMobile m, VectUnitaire dir,ObjetRaytracing... aIgnorer) {
 		double distance= Double.MAX_VALUE;
 		double inter;
+		
+		List<ObjetRaytracing> listeObjets = new ArrayList<ObjetRaytracing> (Arrays.asList( getListeObjets() ));
+		listeObjets.removeAll(Arrays.asList(aIgnorer));
+		
 		ObjetRaytracing result=getFond();
-		for (ObjetRaytracing o : getListeObjetsEditables()) {
+		for (ObjetRaytracing o : listeObjets) {
 			if ((inter =o.dist(m,dir)) < distance) {
 				distance = inter;
 				result=o;
@@ -142,6 +150,25 @@ public abstract class SceneSansSources implements Stageable {
 	public double getBlanc() {
 		// TODO Auto-generated method stub
 		return intensiteBlanc;
+	}
+	
+	public static void main(String[] args) {
+		Point3 source = Point3.origine;
+		Point3 pt = Point3.origine.plus(new R3(5,0,0));
+		
+		SceneRaytracing sc = new SceneRaytracing();
+		
+		VectUnitaire norm = R3.ux;
+		Point3 ptPart = Point3.origine.plus(new R3(2,0,0));
+		Plan p = new Plan("", norm, ptPart, Color.BLACK);
+		sc.ajouter(p);
+		
+		PointMobile photon = new PointMobile(source);
+		
+		System.out.println(sc.avancerJusquauChoc(photon, source.Vecteur(ptPart)));
+		
+		
+		
 	}
 
 }

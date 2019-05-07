@@ -1,15 +1,16 @@
 package objets.objetPhong;
 
 import java.awt.Color;
-import algLin.M3;
-import algLin.Point3;
-import algLin.R3;
+
+import auxMaths.algLin.M3;
+import auxMaths.algLin.Point3;
+import auxMaths.algLin.R3;
+import ihm.fenetre1.edition.entrees.Couleur;
+import ihm.fenetre1.edition.entrees.Point;
+import ihm.fenetre1.edition.entrees.Scalaire;
 import objetmaths.surfacemaths.Quadrique;
 import objets.TourneAutour;
-import objets.editable.Couleur;
-import objets.editable.Point;
-import objets.editable.Scalaire;
-import optique.CouleurS;
+import optique.lumiere.CouleurS;
 
 public class Sphere extends Surface implements TourneAutour{
 

@@ -1,8 +1,9 @@
 package objetmaths.surfacemaths;
 
-import algLin.M3;
-import algLin.Point3;
-import algLin.R3;
+import auxMaths.algLin.M3;
+import auxMaths.algLin.O3;
+import auxMaths.algLin.Point3;
+import auxMaths.algLin.R3;
 
 public abstract class PolygoneConvexe extends SurfacePlaneConvexe {
 	
@@ -61,7 +62,7 @@ public abstract class PolygoneConvexe extends SurfacePlaneConvexe {
 	
 	@Override
 	public void faireTourner(double val, R3 axe) {
-		M3 rot = M3.rotation(axe, val);
+		M3 rot = O3.rotation(axe, val);
 		setBaseRef(getBaseRef().fois(rot));
 		for (int i=0; i<getListePoints().length; i++)
 			getListePoints()[i] = getListePoints()[i].appliquerRot(centre, axe, val);

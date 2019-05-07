@@ -4,13 +4,17 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
 
-import algLin.Point3;
-import algLin.R3;
+import auxMaths.algLin.Point3;
+import auxMaths.algLin.R3;
+import ihm.fenetre1.ongletsEdition.ongletScene.IHMListe;
+import ihm.fenetre1.ongletsEdition.ongletScene.TypeObjetEntrable;
 import objets.MiroirMecatro;
-import optique.CouleurL;
-import optique.Photon;
+import objets.objetMecatro.MiroirRectangle;
+import optique.Eclairage;
 import optique.Source;
 import optique.SourcePonctuelleIsotrope;
+import optique.lumiere.AssociationLumieres;
+import optique.lumiere.CouleurL;
 
 /** La sceneMecatro est une scène de base dans laquelle il n'y a qu'une unique source, placée en l'origine et de couleur donnée.
  * La scène contient une catégorie particulière d'objets : les miroirMecatros 
@@ -19,17 +23,32 @@ import optique.SourcePonctuelleIsotrope;
  */
 public class SceneMecatro extends SceneSansSources {
 	
-	public List<MiroirMecatro> listeMiroirs;
-	protected CouleurL lumSource;
-	private Point3 source;
+	private List<MiroirMecatro> listeMiroirs;
+	
+	private List<Eclairage> listeSourcesVirtuelles;
+	
+	//protected CouleurL lumSource;
+	//private Point3 pointSource;
+	
+	protected SourcePonctuelleIsotrope source;
+	
+	public IHMListe<Source> ihmSources;
 	
 	
 	public SceneMecatro(CouleurL lumiere) {
 		super();
 		listeMiroirs=new ArrayList<MiroirMecatro>();
+		listeSourcesVirtuelles=new ArrayList<Eclairage>();
 		
-		source = Point3.origine.plus(R3.uy);
-		lumSource=lumiere;
+		Point3 pointSource = Point3.origine;
+		CouleurL lumSource=lumiere;
+		
+		source = new SourcePonctuelleIsotrope("Source centrale", pointSource, lumSource);
+		
+
+		List<Source> listeSources = new ArrayList<Source>();	//liste destinee a ne contenir qu un element
+		listeSources.add(source);
+		ihmSources  = new IHMListe<Source>(listeSources);
 		}
 	
 	
@@ -42,8 +61,8 @@ public class SceneMecatro extends SceneSansSources {
 	//Getters
 
 	@Override
-	public Source[] getSources() {
-		return new Source[] {new SourcePonctuelleIsotrope(source, lumSource)};
+	public SourcePonctuelleIsotrope[] getSources() {
+		return new SourcePonctuelleIsotrope[] {source};
 	}
 	
 	
@@ -60,8 +79,12 @@ public class SceneMecatro extends SceneSansSources {
 			throw new IllegalArgumentException("Erreur dans l'ajout de l'objet : type non reconnu.");
 		}
 		
-		if (o instanceof MiroirMecatro)
+		if (o instanceof MiroirMecatro) {
 			listeMiroirs.add((MiroirMecatro)o);
+			((MiroirMecatro)o).addSourcesVirtuelles(listeSourcesVirtuelles, this);
+		}
+
+		ihmSources.conformerAuContenu();
 	}
 		
 	
@@ -75,9 +98,37 @@ public class SceneMecatro extends SceneSansSources {
 			throw new IllegalArgumentException("Erreur dans l'ajout de l'objet : type non reconnu.");
 		}
 		
-		if (o instanceof MiroirMecatro)
+		if (o instanceof MiroirMecatro) {
 			listeMiroirs.remove((MiroirMecatro)o);
+			majSourcesVirtuelles();
+		}
+		
+		ihmSources.conformerAuContenu();
 
+	}
+	
+	/**Vide la liste des sources virtuelles puis la remplit compte-tenu de la liste des miroirs
+	 * 
+	 */
+	private void majSourcesVirtuelles() {
+		listeSourcesVirtuelles = new ArrayList<Eclairage>();
+		for (MiroirMecatro m : listeMiroirs)
+			m.addSourcesVirtuelles(listeSourcesVirtuelles, this);
+	}
+	
+	
+	@Override
+	public IHMListe<Source> getIHMSources() {
+		return ihmSources;
+	}
+
+
+	@Override
+	public TypeObjetEntrable[] getObjetsAjoutables() {
+		return new TypeObjetEntrable[] {
+				TypeObjetEntrable.Plan,
+				TypeObjetEntrable.Sphere
+		};
 	}
 	
 	//===============================================
@@ -88,10 +139,21 @@ public class SceneMecatro extends SceneSansSources {
 	 * 
 	 */
 	@Override
-	public List<Photon> getLumieresEn(Point3 p) {
-		List<Photon> result = new ArrayList<Photon>();
-		for (MiroirMecatro m : listeMiroirs)
-			result.add(m.getIntensiteRecue(this));
+	public AssociationLumieres getLumieresEn(Point3 p) {
+		AssociationLumieres result = new AssociationLumieres();
+		for (Eclairage e : listeSourcesVirtuelles)
+			result.add(e.getInfluence(p, this));
 		return result;
 	}
+
+	public static void main(String[] args) {
+		SceneMecatro scene = new SceneMecatro();
+		MiroirRectangle mir1 = new MiroirRectangle("Miroir 1" ,R3.ux.opp(), Point3.origine.moins(R3.ux.prod(5)),10,10);
+		scene.ajouter(mir1);
+		
+		Point3 ptVue = Point3.origine.plus(R3.ux);
+		System.out.println(scene.getLumieresEn(ptVue));
+		
+	}
+
 }

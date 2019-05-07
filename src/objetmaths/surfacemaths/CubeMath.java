@@ -2,11 +2,11 @@ package objetmaths.surfacemaths;
 
 import java.io.Serializable;
 import java.util.List;
-import algLin.M3;
-import algLin.Point3;
-import algLin.R3;
-import corps.Parametres;
-import corps.ParametresRaytracing;
+
+import auxMaths.algLin.M3;
+import auxMaths.algLin.Point3;
+import auxMaths.algLin.R3;
+import corps.tableauCouleurs.Parametres;
 
 public class CubeMath implements SurfMath, Serializable{
 

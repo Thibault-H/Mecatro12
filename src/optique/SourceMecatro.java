@@ -1,11 +1,17 @@
 package optique;
 
-import algLin.Point3;
-import objets.editable.Couleur;
-import objets.editable.Point;
+import java.util.HashMap;
+import java.util.Map;
+
+import auxMaths.algLin.Point3;
+import ihm.fenetre1.edition.Entrable;
+import ihm.fenetre1.edition.entrees.Couleur;
+import optique.lumiere.CouleurL;
+import optique.sources.illumination.IlluminationPonctuelle;
+import optique.sources.obstruction.ObstructionBasique;
 
 public class SourceMecatro extends SourcePonctuelleIsotrope {
-	
+
 	/**
 	 * 
 	 */
@@ -14,25 +20,36 @@ public class SourceMecatro extends SourcePonctuelleIsotrope {
 	SourceMecatro(CouleurL l) {
 		super("Source", Point3.origine, l);
 	}
-	
+
 	SourceMecatro(double i) {
 		super("Source", Point3.origine, i);
 	}
-	
+
+	//==================================
+	// Edition
+
+
+	@Override
+	public Map<String,Entrable> getAttributsEditables() {
+		return new HashMap<String,Entrable>(attributs);
+	}
+
 	@Override
 	public void majListeAttributs() {
-		//attributs.put("Position", new Point(position));
 		//attributs.put("Portee", new Scalaire(rayonIntMax));
-		attributs.put("Lumiere", new Couleur(lum) );
-		
+		attributs.put("Lumiere", new Couleur(getLumiereCentrale()) );
+
 	}
 
 	@Override
 	public void maj() {
-		//position = ((Point) attributs.get("Position")).getValue();
 		//rayonIntMax = ((Scalaire) attributs.get("Portee")).getValue();
-		lum = ((Couleur) attributs.get("Lumiere")).getValueL();
-		
+		CouleurL lum = ((Couleur) attributs.get("Lumiere")).getValueL();
+
+		illum = new IlluminationPonctuelle(Point3.origine, lum, 1.0/3.544908);
+		voil = new ObstructionBasique(Point3.origine);
+
 	}
+
 
 }

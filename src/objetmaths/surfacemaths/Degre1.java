@@ -1,10 +1,10 @@
 package objetmaths.surfacemaths;
 
 import java.io.Serializable;
-import algLin.Point3;
-import algLin.R3;
-import corps.Parametres;
-import corps.ParametresRaytracing;
+
+import auxMaths.algLin.Point3;
+import auxMaths.algLin.R3;
+import corps.tableauCouleurs.Parametres;
 
 public class Degre1 implements SurfMath, Serializable{
   

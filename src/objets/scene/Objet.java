@@ -1,12 +1,7 @@
 package objets.scene;
 
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
-
-import objets.TypeObjet;
-import objets.editable.Entrable;
+import objets.CategorieObjet;
 
 public abstract class Objet implements Serializable{
 
@@ -30,7 +25,7 @@ public abstract class Objet implements Serializable{
 		else return name;
 	}
 
-	public abstract TypeObjet getTypeObjet();
+	public abstract CategorieObjet getTypeObjet();
 
 
 	

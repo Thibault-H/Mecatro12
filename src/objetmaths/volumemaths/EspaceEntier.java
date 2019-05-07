@@ -1,6 +1,6 @@
 package objetmaths.volumemaths;
 
-import algLin.Point3;
+import auxMaths.algLin.Point3;
 
 public class EspaceEntier implements VolumeMath {
 

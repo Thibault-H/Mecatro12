@@ -1,22 +1,23 @@
 package objets.objetPhong;
 
 import java.awt.Color;
-import algLin.Point3;
-import algLin.R3;
+
+import auxMaths.algLin.Point3;
+import auxMaths.algLin.R3;
+import ihm.fenetre1.edition.entrees.Couleur;
+import ihm.fenetre1.edition.entrees.Point;
+import ihm.fenetre1.edition.entrees.Scalaire;
+import ihm.fenetre1.edition.entrees.Vecteur;
 import objetmaths.surfacemaths.RectangleMath;
-import objets.editable.Couleur;
-import objets.editable.Point;
-import objets.editable.Scalaire;
-import objets.editable.Vecteur;
-import optique.CouleurS;
+import optique.lumiere.CouleurS;
 
 public class Rectangle extends Surface{
 
 	
-	private R3 normale;
-	private Point3 centre;
-	private double largeur;
-	private double longueur;
+	protected R3 normale;
+	protected Point3 centre;
+	protected double largeur;
+	protected double longueur;
 
 	public Rectangle(String name, R3 n, Point3 p, double largeur, double longueur, Color c) {
 		super(name);

@@ -2,11 +2,13 @@ package optique;
 
 import java.io.Serializable;
 
-import algLin.Point3;
-import algLin.PointMobile;
-import algLin.R3;
+import auxMaths.PointMobile;
+import auxMaths.algLin.Point3;
+import auxMaths.algLin.R3;
+import auxMaths.algLin.VectUnitaire;
 import objets.ObjetRaytracing;
 import objets.scene.Stageable;
+import optique.lumiere.CouleurL;
 import objets.scene.SceneRaytracing;
 
 
@@ -18,7 +20,9 @@ public class Photon implements Serializable{
   private static final long serialVersionUID = 6334639455076377916L;
   private PointMobile position;
   Stageable sc;
-  R3 v=R3.zero;
+  
+  VectUnitaire v=R3.ux;		//Direction d
+  VectUnitaire direction;
   CouleurL coul;
 
   
@@ -72,7 +76,7 @@ public class Photon implements Serializable{
   //====================================
   
   public ObjetRaytracing avancer(R3 dir) {  //dir est normé
-    v=dir;
+    v=new VectUnitaire(dir);
     return sc.avancerJusquauChoc(position, dir);
   }
  

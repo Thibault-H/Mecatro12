@@ -1,7 +1,7 @@
 package objetmaths.surfacemaths;
 
-import algLin.Point3;
-import algLin.R3;
+import auxMaths.algLin.Point3;
+import auxMaths.algLin.R3;
 
 
 public interface SurfMath{

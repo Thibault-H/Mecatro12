@@ -1,6 +1,8 @@
 package objetmaths.surfacemaths;
 
-import algLin.*;
+import auxMaths.algLin.M3;
+import auxMaths.algLin.Point3;
+import auxMaths.algLin.R3;
 import objetmaths.volumemaths.VolumeMath;
 
 public class AngleSolide implements VolumeMath {

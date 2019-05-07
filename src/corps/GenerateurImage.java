@@ -1,101 +1,126 @@
 package corps;
 
-import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.JFrame;
+import javax.swing.JMenu;
+import javax.swing.JPanel;
+import javax.swing.JTabbedPane;
 
-import objets.scene.Stageable;
-import optique.CouleurL;
+import corps.tableauCouleurs.TableauCouleurs;
+import ihm.Programmable;
+import ihm.fenetre1.edition.EditableGenerique;
+import ihm.fenetre1.edition.FenetreEntree;
+import ihm.fenetre1.edition.entrees.Scalaire;
 
-public abstract class GenerateurImage<S extends Stageable> {
-	// =============================================
-		// Attributs
-		// =============================================
+public abstract class GenerateurImage implements Programmable{
 
-		// PropriÃ©tÃ©s fondamentales et nÃ©cessaires
+	private Scalaire intBlanc;
+	public void modifBlanc(double d, double dMax) {
+		intBlanc.conformerA(intBlanc.getValue() * (1 + d / dMax));
+	}
+
+
+
+	/**
+	 * Renvoie le tableau de couleur qui correspond Ã  l'image rendue
+	 * 
+	 * @return
+	 */
+	protected abstract TableauCouleurs getTab(TypeImage t) ;
+
+
+
+	// =================================================
+	// ============= Programme principal ===============
+	// =================================================
+
+	/**
+	 * Fonction auxilliaire des mainProgram; sert simplement à factoriser le corps des deux méthodes suivantes
+	 * 
+	 * @return
+	 */
+	private BufferedImage auxMainProgram(TypeImage t, double iblanc, boolean isIntensiteImposee) {
+		long startTime = System.nanoTime();
+
+		TableauCouleurs premImage = getTab(t);
+
+		if (isIntensiteImposee)
+			premImage.setBlanc(iblanc);
+
+		BufferedImage off_Image = premImage.getImage();
+		try {
+			File outputfile = new File("saved.png");
+			ImageIO.write(off_Image, "png", outputfile);
+		} catch (IOException e) {
+		}
+		System.out.println((System.nanoTime() - startTime) / 1000000 + "ms de lecture");
+		return off_Image;
+	}
+
+
+
+	/**
+	 * Renvoie une image du type demandé qui satisfasse les paramètres entrés (ces derniers sont pris en compte dans getTab)
+	 * Impose le seuil de saturation explicitement.
+	 * @param t
+	 * @param iblanc
+	 * @return
+	 */
+	public BufferedImage mainProgram(TypeImage t, double iblanc) {
+		return auxMainProgram(t,iblanc,true);
+	}
+
+
+	/**
+	 * Renvoie une image du type demandé qui satisfasse les paramètres entrés (ces derniers sont pris en compte dans getTab)
+	 * Le seuil de saturation est imposé de telle sorte qu'il coïncide avec l'intensité max. 
+	 * @param t
+	 * @return
+	 */
+	public BufferedImage mainProgram(TypeImage t) {
+		return auxMainProgram(t,Double.NaN, false);
+	}
+
+
+
+
+
+	// =================================================
+	// ========== Methodes de Programmable =============
+	// =================================================
+
+
+
+	@Override
+	public BufferedImage imageEdition() {
+		return mainProgram(TypeImage.Previsualisation);
+	}
+	
+	@Override
+	public JFrame fenetreOptions() {
+		return new FenetreEntree(new EditableGenerique(intBlanc),"Saturation");
+	}
 	
 
-		
-		public double intBlanc;
-		public CouleurL[][] imageBase;
-		
-		public abstract Parametres getParam() ;
 
-		
 
-		public abstract Stageable getScene() ;
-		
-		// =================================================
-		// Fonctions auxilliaires du programme
 
-		public void modifBlanc(double d, double dMax) {
-			intBlanc = intBlanc * (1 + d / dMax);
-		}
 
-		
 
-		/**
-		 * Renvoie le tableau de couleur qui correspond Ã  l'image rendue
-		 * 
-		 * @return
-		 */
-		public abstract CouleurL[][] getTab();
 
-		
-		/**
-		 * S'adapte Ã  la luminositÃ© globale de la scÃ¨ne pour rendre l'image finale
-		 * 
-		 * @param premImage
-		 * @return
-		 */
-		public BufferedImage getPic(CouleurL[][] premImage, double iBlanc) {
-			BufferedImage off_Image = new BufferedImage(getParam().getLargpx(), getParam().getHautpx(), BufferedImage.TYPE_INT_ARGB);
-			Graphics2D g2 = off_Image.createGraphics();
-			for (int i = 0; i < getParam().getLargpx(); i++) {
-				for (int j = 0; j < getParam().getHautpx(); j++) {
-					g2.setColor(premImage[i][j].appliquerIntGlobale(iBlanc));/*
-															 * if (premImage[i][j].appliquerIntGlobale(iBlanc).getBlue() <25
-															 * && premImage[i][j].appliquerIntGlobale(iBlanc).getRed() <25)
-															 * System.out.print("");
-															 */
-					//System.out.println(iBlanc +" | "+premImage[i][j]+ " | " +  premImage[i][j].appliquerIntGlobale(iBlanc));
-					g2.fillRect(i, j, 1, 1);
-				}
-			}
-			return off_Image;
-		}
 
-		// ====================================
-		// Programme principal
 
-		/**
-		 * Renvoie l'image de la scÃ¨ne correspondant au point de vue choisi
-		 * 
-		 * @return
-		 */
-		public BufferedImage mainProgram(double iblanc) {
-			long startTime = System.nanoTime();
 
-			CouleurL[][] premImage = getTab();
+	@Override
+	public JMenu menu() {
+		return null;
+	}
 
-			BufferedImage off_Image = getPic(premImage, iblanc);
-			try {
-				File outputfile = new File("saved.png");
-				ImageIO.write(off_Image, "png", outputfile);
-			} catch (IOException e) {
-			}
-			System.out.println((System.nanoTime() - startTime) / 1000000 + "ms de lecture");
-			return off_Image;
-		}
-		
-		public BufferedImage mainProgram() {
-			return mainProgram(200000);
-		}
 
-		
-		
-		
+
 }

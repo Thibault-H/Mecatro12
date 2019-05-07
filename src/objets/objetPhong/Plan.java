@@ -1,13 +1,14 @@
 package objets.objetPhong;
 
 import java.awt.Color;
-import algLin.Point3;
-import algLin.R3;
+
+import auxMaths.algLin.Point3;
+import auxMaths.algLin.R3;
+import ihm.fenetre1.edition.entrees.Couleur;
+import ihm.fenetre1.edition.entrees.Point;
+import ihm.fenetre1.edition.entrees.Vecteur;
 import objetmaths.surfacemaths.Degre1;
-import objets.editable.Couleur;
-import objets.editable.Vecteur;
-import objets.editable.Point;
-import optique.CouleurS;
+import optique.lumiere.CouleurS;
 
 public class Plan extends Surface{
 

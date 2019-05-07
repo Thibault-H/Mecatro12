@@ -1,12 +1,12 @@
 package objets;
 
 
-import algLin.Point3;
-import algLin.R3;
+import auxMaths.algLin.Point3;
+import auxMaths.algLin.R3;
+import auxMaths.algLin.VectUnitaire;
 import objets.scene.Objet;
 import objets.scene.Stageable;
-import objets.scene.SceneRaytracing;
-import optique.CouleurL;
+import optique.lumiere.CouleurL;
 
 
 public abstract class ObjetRaytracing extends Objet {
@@ -27,8 +27,7 @@ public abstract class ObjetRaytracing extends Objet {
    */
   public abstract double dist(Point3 m, R3 d);  //d est normé
   
-  
-  
+   
   
   /**Renvoie la couleur de l'objet en le point m vu selon d, en prenant au mieux en compte l'environnement dans sa complexité
    * 
@@ -36,7 +35,19 @@ public abstract class ObjetRaytracing extends Objet {
    * @param d
    * @return
    */
-  public abstract CouleurL getColor(Point3 m, R3 d, Stageable s);
+  public abstract CouleurL getColor(Point3 m, VectUnitaire d, Stageable s);
+  
+  /**Renvoie la couleur de l'objet en le point m vu selon d, en prenant au mieux en compte l'environnement dans sa complexité
+   * 
+   * @param m
+   * @param d
+   * @return
+   */
+  public CouleurL getColor(Point3 m, R3 d, Stageable s) {
+	  return getColor(m,new VectUnitaire(d),s);
+  }
+  
+  
   
   /**Renvoie la couleur avec un terme de réflexion de type miroir
    * 
