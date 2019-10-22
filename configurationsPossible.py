@@ -23,6 +23,7 @@ lz = 0.5*scale
 hauteurFenetre = 1.075*scale
 
 ## Basis change from the (X,Y,Z) system to the (G,x,y,z) system
+##La base (x,y,z) est telle que le vecteur x soit orienté vers la fenêtre (centre du repère) et y soit à l'horizontal
 
 def basisChange(X,Y,Z,G): # return coordinates in (G,x,y,z) system, G beeing written in the (X,Y,Z) system
 
